@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "532663268674",
+    "project_id": "cashes-ce55e",
+    "storage_bucket": "cashes-ce55e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532663268674:android:77ab54ae0eb3789d61c4db",
+        "android_client_info": {
+          "package_name": "com.example.cashes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrvayavi4ct8opgoxVgFPfEc0zjbm_AO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
