@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         RegisterScreen.routeName: (_) => RegisterScreen(),
         LoginScreen.routeName: (_) => LoginScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
-        CashScreen.routeName: (_) =>  CashScreen(),
+        CashScreen.routeName: (_) => CashScreen(),
       },
     );
   }

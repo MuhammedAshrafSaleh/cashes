@@ -183,31 +183,31 @@ class PdfApi {
     return Text(text, style: TextStyle(font: font));
   }
 
-  static Future<File?> saveDocument({
-    required String name,
-    required pw.Document pdf,
-  }) async {
-    try {
-      final bytes = await pdf.save();
-      final dir = await getApplicationDocumentsDirectory();
-      final file = File('${dir.path}/$name');
-      await file.writeAsBytes(bytes);
-      print('PDF saved at ${file.path}');
-      return file;
-    } catch (e) {
-      print('Error saving PDF: $e');
-      return null;
-    }
-  }
+  // static Future<File?> saveDocument({
+  //   required String name,
+  //   required pw.Document pdf,
+  // }) async {
+  //   try {
+  //     final bytes = await pdf.save();
+  //     final dir = await getApplicationDocumentsDirectory();
+  //     final file = File('${dir.path}/$name');
+  //     await file.writeAsBytes(bytes);
+  //     print('PDF saved at ${file.path}');
+  //     return file;
+  //   } catch (e) {
+  //     print('Error saving PDF: $e');
+  //     return null;
+  //   }
+  // }
 
-  static Future<void> openFile(File file) async {
-    try {
-      final url = file.path;
-      print('Attempting to open file at $url');
-      final result = await OpenFilex.open(url);
-      print('OpenFile result: ${result.message}');
-    } catch (e) {
-      print('Error opening file: $e');
-    }
-  }
+  // static Future<void> openFile(File file) async {
+  //   try {
+  //     final url = file.path;
+  //     print('Attempting to open file at $url');
+  //     final result = await OpenFilex.open(url);
+  //     print('OpenFile result: ${result.message}');
+  //   } catch (e) {
+  //     print('Error opening file: $e');
+  //   }
+  // }
 }

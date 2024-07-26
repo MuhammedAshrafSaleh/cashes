@@ -1,4 +1,5 @@
 class Project {
+  static const String collectionName = 'projects';
   String? id;
   String? name;
   String? money;
@@ -22,7 +23,7 @@ class Project {
           money: data['money'] as String,
           date: data['date'] as String,
           type: data['type'] as String,
-          userId: data['typuserIde'] as String,
+          userId: data['userId'] as String,
         );
 
   Map<String, dynamic> toFirestore() {

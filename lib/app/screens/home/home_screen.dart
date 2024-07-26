@@ -11,11 +11,24 @@ import '../../widget/custom_textfield.dart';
 import 'project_list_widget.dart';
 
 // ignore: must_be_immutable
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
   static const String routeName = 'Home-Screen';
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   var projectProvider;
   var authProvider;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // projectProvider
+  }
+
   @override
   Widget build(BuildContext context) {
     projectProvider = Provider.of<ProjectProvider>(context);
@@ -103,7 +116,7 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             projectProvider.addProject(
-                              Project(
+                              project: Project(
                                 id: '${projectProvider.projects.length}',
                                 name: nameController.text,
                                 money: moneyController.text,
@@ -111,9 +124,19 @@ class HomeScreen extends StatelessWidget {
                                 type: typeController.text,
                                 userId: authProvider.currentUser.id,
                               ),
+                              uId: authProvider.currentUser.id,
                             );
-                            print(nameController.text);
-                            print(moneyController.text);
+                            // FirebaseFirestoreManager.addProject(
+                            //   project: Project(
+                            //     id: '',
+                            //     name: nameController.text,
+                            //     money: moneyController.text,
+                            //     date: formatDate(DateTime.now().toString()),
+                            //     type: typeController.text,
+                            //     userId: authProvider.currentUser.id,
+                            //   ),
+                            //   uId: authProvider.currentUser.id,
+                            // );
                             nameController.clear();
                             moneyController.clear();
                             Navigator.pop(context);

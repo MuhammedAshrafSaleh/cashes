@@ -23,7 +23,8 @@ class FirebaseAuthManager {
         password: password,
       );
       FirebaseFirestoreManager.addUserToFireStore(
-          user: AppUser(id: credential.user!.uid, email: email, name: name));
+        user: AppUser(id: credential.user!.uid, email: email, name: name),
+      );
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
           context: context, message: 'Registered Successfully');
@@ -52,18 +53,18 @@ class FirebaseAuthManager {
       {required email, required password, required context}) async {
     DialogUtls.showLoading(context: context, message: 'Loading...');
     try {
-      var authProvider = Provider.of<AuthManagerProvider>(context);
+      var authProvider = Provider.of<AuthManagerProvider>(context,
+          listen:
+              false); // when you call the provider outside the build add listen:false
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       print(credential.user!.uid);
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
           context: context, message: 'Successfully Loged In');
-      Future.delayed(const Duration(milliseconds: 300));
       var myCurrentUser =
           await FirebaseFirestoreManager.getUser(userId: credential.user!.uid);
       authProvider.updateUser(myCurrentUser);
-      Navigator.pop(context);
       Navigator.pushReplacementNamed(context, HomeScreen.routeName);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -82,6 +83,25 @@ class FirebaseAuthManager {
         DialogUtls.showMessage(context: context, message: e.toString());
       }
     }
+  }
+
+  static void checkUserState(
+      {required context, required AuthManagerProvider authProvider}) {
+    FirebaseAuth.instance.userChanges().listen((User? user) async {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        var myCurrentUser =
+            await FirebaseFirestoreManager.getUser(userId: user.uid);
+        authProvider.updateUser(myCurrentUser);
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        } else {
+          print('Context is no longer valid');
+        }
+        print('User is signed in!');
+      }
+    });
   }
 
   static Future<void> signOut() async {

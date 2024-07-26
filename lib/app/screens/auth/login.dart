@@ -1,21 +1,46 @@
 import 'package:cashes/app/screens/auth/register.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/firebase configurations/firebase_auth_manager.dart';
 import '../../core/regex.dart';
 import '../../core/theme.dart';
+import '../../providers/auth_manager_provider.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_text_btn.dart';
 import '../../widget/custom_textfield.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
   static const routeName = 'LoginScreen';
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController _emailController =
       TextEditingController(text: 'a@gmail.com');
+
   final TextEditingController _passwordController =
       TextEditingController(text: '123456');
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO: What is SchedulerBinding ?
+    // TODO: Login Screen Is Shown and then going to the Home Screen
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      AuthManagerProvider authProvider =
+          Provider.of<AuthManagerProvider>(context, listen: false);
+      FirebaseAuthManager.checkUserState(
+          context: context, authProvider: authProvider);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
