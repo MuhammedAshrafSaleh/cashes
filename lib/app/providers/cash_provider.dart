@@ -1,88 +1,53 @@
+import 'package:cashes/app/core/firebase%20configurations/firebase_firebase_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../models/cash.dart';
 
 class CashProvider extends ChangeNotifier {
-  List<Cash> cashes = [
-    Cash(
-        id: '1',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '2',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '3',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '4',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '5',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '6',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '7',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '8',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '9',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-    Cash(
-        id: '10',
-        name: 'الاسم',
-        cashNumber: '123',
-        price: '3655.255',
-        date: '25-07-2024'),
-  ];
+  List<Cash> cashes = [];
 
-  void addCash(Cash cash) {
-    print("=================================");
-    print(cash.id);
-    print(cash.name);
-    print(cash.price);
-    print("=================================");
-    cashes.add(cash);
+  void getCashes({
+    required String userId,
+    required String projectId,
+  }) async {
+    cashes = await FirebaseFirestoreManager.getAllCashes(
+        userId: userId, projectId: projectId);
+    for (var cash in cashes) {
+      print(cash.name ?? 'name null');
+    }
     notifyListeners();
   }
 
-  void updateCash({required Cash cash}) {
-    cashes[cashes.indexWhere((oldCash) => oldCash.id == cash.id)] = cash;
-    notifyListeners();
+  Future addCash({
+    required cash,
+    required userId,
+    required projectId,
+  }) async {
+    await FirebaseFirestoreManager.addtCashesByUserIdAndProjectId(
+        cash: cash, userId: userId, projectId: projectId);
+    getCashes(userId: userId, projectId: projectId);
   }
 
-  void deleteCash(Cash cash) {
-    cashes.remove(cash);
-    notifyListeners();
+  void updateCash(
+      {required Cash cash, required projectId, required userId}) async {
+    await FirebaseFirestoreManager.updateCash(
+      cash: cash,
+      projectId: projectId,
+      userId: userId,
+    );
+    getCashes(projectId: projectId, userId: userId);
+  }
+
+  void deleteCash({
+    required cash,
+    required userId,
+    required projectId,
+  }) async {
+    await FirebaseFirestoreManager.deleteCashByUserIdAndProjectId(
+      userId: userId,
+      projectId: projectId,
+      cash: cash,
+    );
+    getCashes(userId: userId, projectId: projectId);
   }
 }

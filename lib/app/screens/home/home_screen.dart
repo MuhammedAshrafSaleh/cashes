@@ -1,6 +1,7 @@
 import 'package:cashes/app/models/project.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../core/theme.dart';
 import '../../core/utls.dart';
@@ -26,7 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // projectProvider
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final projectProvider =
+          Provider.of<ProjectProvider>(context, listen: false);
+      projectProvider.getProjects(uId: authProvider.currentUser.id);
+    });
   }
 
   @override
@@ -114,10 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       CustomBtn(
                         text: 'Add Project',
                         onPressed: () {
+                          var uuid = const Uuid();
                           if (formKey.currentState!.validate()) {
                             projectProvider.addProject(
                               project: Project(
-                                id: '${projectProvider.projects.length}',
+                                id: uuid.v4(),
                                 name: nameController.text,
                                 money: moneyController.text,
                                 date: formatDate(DateTime.now().toString()),
@@ -126,17 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               uId: authProvider.currentUser.id,
                             );
-                            // FirebaseFirestoreManager.addProject(
-                            //   project: Project(
-                            //     id: '',
-                            //     name: nameController.text,
-                            //     money: moneyController.text,
-                            //     date: formatDate(DateTime.now().toString()),
-                            //     type: typeController.text,
-                            //     userId: authProvider.currentUser.id,
-                            //   ),
-                            //   uId: authProvider.currentUser.id,
-                            // );
                             nameController.clear();
                             moneyController.clear();
                             Navigator.pop(context);

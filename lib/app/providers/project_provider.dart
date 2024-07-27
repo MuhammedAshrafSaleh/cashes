@@ -6,6 +6,11 @@ import '../models/project.dart';
 class ProjectProvider extends ChangeNotifier {
   List cashes = [];
   List<Project?> projects = [];
+  Project? currentProject;
+  void getProject({required Project project}) {
+    currentProject = project;
+    notifyListeners();
+  }
 
   void getProjects({
     required String uId,
@@ -25,19 +30,23 @@ class ProjectProvider extends ChangeNotifier {
     await FirebaseFirestoreManager.addProjects(
       project: project,
       userId: uId,
-      projectId: projects.length,
     );
     getProjects(uId: uId);
   }
 
-  void updateProject({required Project project}) {
-    projects[projects
-        .indexWhere((oldProject) => oldProject!.id == project.id)] = project;
-    notifyListeners();
+  void updateProject({required Project project, required userId}) async {
+    await FirebaseFirestoreManager.updateProject(
+      project: project,
+      userId: userId,
+    );
+    getProjects(uId: userId);
   }
 
-  void deleteProject(Project project) {
-    projects.remove(project);
-    notifyListeners();
+  void deleteProject({required Project project, required String userId}) async {
+    await FirebaseFirestoreManager.removeProjectById(
+      userId: userId,
+      projectId: project.id!,
+    );
+    getProjects(uId: userId);
   }
 }

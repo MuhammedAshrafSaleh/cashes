@@ -1,13 +1,18 @@
 import 'package:cashes/app/core/pdf_api.dart';
 import 'package:cashes/app/models/cash.dart';
 import 'package:cashes/app/models/invoice.dart';
+import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/cash_provider.dart';
 import 'package:cashes/app/widget/custom_dialog_widget.dart';
+import 'package:cashes/app/widget/empty_screen.dart';
 import 'package:flutter/material.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../core/theme.dart';
+import '../../models/project.dart';
+import '../../providers/project_provider.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_textfield.dart';
 import '../../widget/date_picker.dart';
@@ -32,54 +37,80 @@ class _CashScreenState extends State<CashScreen> {
   //   }
   // }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final projectProvider =
+          Provider.of<ProjectProvider>(context, listen: false);
+      final authProvider =
+          Provider.of<AuthManagerProvider>(context, listen: false);
+      final cashProvider = Provider.of<CashProvider>(context, listen: false);
+      cashProvider.getCashes(
+        userId: authProvider.currentUser!.id!,
+        projectId: projectProvider.currentProject!.id!,
+      );
+    });
+  }
+
   bool _isSortAsc = true;
   var cashProvider;
+  var authProvider;
+  var project;
   @override
   Widget build(BuildContext context) {
+    project = ModalRoute.of(context)!.settings.arguments as Project;
     cashProvider = Provider.of<CashProvider>(context);
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: () {
-                PdfApi.createPdf(
-                  Invoice(
-                    logo: '',
-                    items: cashProvider.cashes,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.print),
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      border: TableBorder.all(),
-                      columns: _createColumn(),
-                      rows: _createRows(),
+    authProvider = Provider.of<AuthManagerProvider>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(project.name ?? 'Zmzm Project'),
+        toolbarHeight: 80.0,
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              PdfApi.createPdf(
+                Invoice(
+                  projectName: project.name,
+                  engineerName: authProvider.currentUser.name,
+                  items: cashProvider.cashes,
+                ),
+              );
+            },
+            icon: const Icon(Icons.print),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: 10),
+          cashProvider.cashes.isEmpty
+              ? EmptyScreen(message: 'No Invoices Yet!')
+              : Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          border: TableBorder.all(),
+                          columns: _createColumn(),
+                          rows: _createRows(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showInvoiceDialog(context: context, isAdd: false);
-          },
-          child: const Icon(Icons.add, color: AppTheme.primaryColor),
-        ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showInvoiceDialog(context: context, isAdd: false);
+        },
+        child: const Icon(Icons.add, color: AppTheme.primaryColor),
       ),
     );
   }
@@ -194,11 +225,13 @@ class _CashScreenState extends State<CashScreen> {
   }
 
   List<DataRow> _createRows() {
-    return cashProvider.cashes.map<DataRow>((Cash cash) {
+    return cashProvider.cashes.asMap().entries.map<DataRow>((entry) {
+      int index = entry.key; // Get the index
+      Cash cash = entry.value; // Get the Cash item
       return DataRow(cells: <DataCell>[
         DataCell(Center(
           child: Text(
-            '${cash.id}',
+            '${index + 1}',
             textAlign: TextAlign.center,
           ),
         )),
@@ -232,7 +265,10 @@ class _CashScreenState extends State<CashScreen> {
                 onPressed: () {
                   int index = cashProvider.cashes.indexOf(cash) ?? 0;
                   showInvoiceDialog(
-                      context: context, isAdd: true, index: index);
+                    context: context,
+                    isAdd: true,
+                    index: index,
+                  );
                 },
                 icon: const Icon(Icons.edit)),
             IconButton(
@@ -240,8 +276,11 @@ class _CashScreenState extends State<CashScreen> {
                   DialogUtls.showDeleteConfirmationDialog(
                       context: context,
                       deleteFunction: () {
-                        Navigator.pop(context);
-                        cashProvider.deleteCash(cash);
+                        cashProvider.deleteCash(
+                          userId: authProvider.currentUser.id,
+                          projectId: project.id,
+                          cash: cash,
+                        );
                       });
                 },
                 icon: const Icon(Icons.delete)),
@@ -325,24 +364,29 @@ class _CashScreenState extends State<CashScreen> {
                         text: isAdd ? 'Update Cash' : 'Add Cash',
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
+                            var uuid = const Uuid();
                             isAdd
                                 ? cashProvider.updateCash(
                                     cash: Cash(
-                                      id: '${cashProvider.cashes[index].id}',
+                                      id: cashProvider.cashes[index].id,
                                       name: nameController.text,
                                       cashNumber: '',
                                       price: priceController.text,
                                       date: dateController.text,
                                     ),
+                                    projectId: project.id,
+                                    userId: authProvider.currentUser.id,
                                   )
                                 : cashProvider.addCash(
-                                    Cash(
-                                      id: '${cashProvider.cashes.length}',
+                                    cash: Cash(
+                                      id: uuid.v4(),
                                       name: nameController.text,
                                       cashNumber: '',
                                       price: priceController.text,
                                       date: dateController.text,
                                     ),
+                                    projectId: project.id,
+                                    userId: authProvider.currentUser.id,
                                   );
                             nameController.clear();
                             priceController.clear();

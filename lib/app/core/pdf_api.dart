@@ -22,7 +22,7 @@ class PdfApi {
         textDirection: TextDirection.rtl,
         margin: const EdgeInsets.symmetric(
           vertical: 2.54 * PdfPageFormat.cm,
-          horizontal: 2.54 * PdfPageFormat.cm,
+          horizontal: 1 * PdfPageFormat.cm,
         ),
         pageFormat: PdfPageFormat.a4,
         theme: pw.ThemeData(
@@ -37,7 +37,11 @@ class PdfApi {
             children: [
               pw.Image(pw.MemoryImage(logo), height: 50),
               SizedBox(height: 10),
-              buildHeader(cairoBold),
+              buildHeader(
+                font: cairoBold,
+                projectName: invoice.projectName,
+                engineerName: invoice.engineerName,
+              ),
               buildInvoice(invoice, cairoBold),
               buildTotal(invoice, cairoBold),
               SizedBox(height: 10),
@@ -56,7 +60,10 @@ class PdfApi {
     await OpenFilex.open(file.path);
   }
 
-  static Widget buildHeader(font) {
+  static Widget buildHeader(
+      {required font,
+      required String projectName,
+      required String engineerName}) {
     return Column(
       children: [
         Container(
@@ -64,7 +71,9 @@ class PdfApi {
           decoration: BoxDecoration(border: Border.all(width: 1)),
           child: Row(
             children: [
-              Expanded(child: textBold(text: 'كشف عهده لـ /', font: font)),
+              Expanded(
+                  child:
+                      textBold(text: 'كشف عهده لـ / $projectName', font: font)),
               Expanded(child: textBold(text: 'رقم العهده /', font: font)),
             ],
           ),
@@ -74,7 +83,9 @@ class PdfApi {
           decoration: BoxDecoration(border: Border.all(width: 1)),
           child: Row(
             children: [
-              Expanded(child: textBold(text: 'مشرف الموقع :', font: font)),
+              Expanded(
+                  child: textBold(
+                      text: 'مشرف الموقع : $engineerName', font: font)),
               Expanded(child: textBold(text: 'تاريخ العهده :', font: font)),
             ],
           ),
@@ -133,9 +144,24 @@ class PdfApi {
         '${index + 1}',
       ];
     }).toList();
+    if (data.length < 25) {
+      for (int i = data.length; i < 25; i++) {
+        int index = i + 1;
+        String number = index.toString();
+        data.add([
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          //  number,
+        ]);
+      }
+    }
 
     final columnWidths = [
-      const pw.IntrinsicColumnWidth(), // Auto width for the first column
+      const pw.FixedColumnWidth(90), // Auto width for the first column
       const pw.FixedColumnWidth(60), // Fixed width for the second column
       const pw.FixedColumnWidth(150), // Fixed width for the third column
       const pw.FixedColumnWidth(65), // Fixed width for the fourth column
@@ -182,32 +208,4 @@ class PdfApi {
   static Widget textBold({required text, required font}) {
     return Text(text, style: TextStyle(font: font));
   }
-
-  // static Future<File?> saveDocument({
-  //   required String name,
-  //   required pw.Document pdf,
-  // }) async {
-  //   try {
-  //     final bytes = await pdf.save();
-  //     final dir = await getApplicationDocumentsDirectory();
-  //     final file = File('${dir.path}/$name');
-  //     await file.writeAsBytes(bytes);
-  //     print('PDF saved at ${file.path}');
-  //     return file;
-  //   } catch (e) {
-  //     print('Error saving PDF: $e');
-  //     return null;
-  //   }
-  // }
-
-  // static Future<void> openFile(File file) async {
-  //   try {
-  //     final url = file.path;
-  //     print('Attempting to open file at $url');
-  //     final result = await OpenFilex.open(url);
-  //     print('OpenFile result: ${result.message}');
-  //   } catch (e) {
-  //     print('Error opening file: $e');
-  //   }
-  // }
 }

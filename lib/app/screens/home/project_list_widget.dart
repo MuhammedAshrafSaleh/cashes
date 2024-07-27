@@ -35,7 +35,7 @@ class ProjectListWidget extends StatelessWidget {
                     Text(
                       'Welcome, $name',
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: AppTheme.primaryColor,
                       ),
@@ -43,9 +43,10 @@ class ProjectListWidget extends StatelessWidget {
                     Text(
                       'Here\'re your projects, $name',
                       style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.black,
+                      ),
                     ),
                   ],
                 ),

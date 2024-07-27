@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController =
-      TextEditingController(text: 'a@gmail.com');
+      TextEditingController(text: 'ashraf@gmail.com');
 
   final TextEditingController _passwordController =
       TextEditingController(text: '123456');
@@ -69,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
+                    color: AppTheme.black
                   ),
                 ),
                 Form(

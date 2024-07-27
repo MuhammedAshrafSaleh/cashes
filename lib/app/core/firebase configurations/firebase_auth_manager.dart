@@ -25,9 +25,11 @@ class FirebaseAuthManager {
       FirebaseFirestoreManager.addUserToFireStore(
         user: AppUser(id: credential.user!.uid, email: email, name: name),
       );
+      await FirebaseAuth.instance.signOut();
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
           context: context, message: 'Registered Successfully');
+      await FirebaseAuth.instance.signOut();
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, LoginScreen.routeName);
     } on FirebaseAuthException catch (e) {
@@ -58,14 +60,16 @@ class FirebaseAuthManager {
               false); // when you call the provider outside the build add listen:false
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      print(credential.user!.uid);
+      // print(credential.user!.uid);
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
           context: context, message: 'Successfully Loged In');
       var myCurrentUser =
           await FirebaseFirestoreManager.getUser(userId: credential.user!.uid);
-      authProvider.updateUser(myCurrentUser);
-      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      if (myCurrentUser != null) {
+        authProvider.updateUser(myCurrentUser);
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         DialogUtls.hideLoading(context: context);
@@ -85,6 +89,7 @@ class FirebaseAuthManager {
     }
   }
 
+  // TODO: How?
   static void checkUserState(
       {required context, required AuthManagerProvider authProvider}) {
     FirebaseAuth.instance.userChanges().listen((User? user) async {

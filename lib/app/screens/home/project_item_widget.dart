@@ -1,5 +1,6 @@
 // ignore: must_be_immutable
 import 'package:cashes/app/providers/project_provider.dart';
+import 'package:cashes/app/screens/cash/cash_screen.dart';
 import 'package:cashes/app/widget/custom_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -30,8 +31,15 @@ class ProjectItem extends StatelessWidget {
                 DialogUtls.showDeleteConfirmationDialog(
                     context: context,
                     deleteFunction: () {
-                      projectProvider.deleteProject(project);
+                      // DialogUtls.showLoading(
+                      //     context: context, message: 'Deleting Now...');
+                      projectProvider.deleteProject(
+                        project: project,
+                        userId: user.id,
+                      );
+                      print('Deleted From this user ${user.id}');
                     });
+                // DialogUtls.hideLoading(context: context);
               },
               backgroundColor: AppTheme.redColor,
               foregroundColor: AppTheme.white,
@@ -62,7 +70,14 @@ class ProjectItem extends StatelessWidget {
             color: AppTheme.primaryColor,
           ),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              projectProvider.getProject(project: project);
+              Navigator.pushNamed(
+                context,
+                CashScreen.routeName,
+                arguments: project,
+              );
+            },
             child: Column(
               children: [
                 Row(
@@ -198,6 +213,7 @@ class ProjectItem extends StatelessWidget {
                                 type: typeController.text,
                                 userId: user.id,
                               ),
+                              userId: user.id,
                             );
                             print(nameController.text);
                             print(moneyController.text);

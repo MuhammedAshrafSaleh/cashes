@@ -1,4 +1,5 @@
 class Cash {
+  static const String collectionName = 'cashes';
   String? id;
   String? name;
   String? cashNumber;
