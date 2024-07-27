@@ -5,6 +5,7 @@ class Cash {
   String? cashNumber;
   String? price;
   String? date;
+  String? imageURl;
 
   Cash({
     required this.id,

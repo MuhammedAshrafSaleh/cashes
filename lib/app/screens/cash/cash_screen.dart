@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cashes/app/core/pdf_api.dart';
 import 'package:cashes/app/models/cash.dart';
 import 'package:cashes/app/models/invoice.dart';
@@ -6,6 +8,7 @@ import 'package:cashes/app/providers/cash_provider.dart';
 import 'package:cashes/app/widget/custom_dialog_widget.dart';
 import 'package:cashes/app/widget/empty_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -358,6 +361,31 @@ class _CashScreenState extends State<CashScreen> {
                           }
                           return null;
                         },
+                      ),
+                      const SizedBox(height: 20),
+                      CustomBtn(
+                        onPressed: () async {
+                          final picker = ImagePicker();
+                          final pickedFile = await picker.pickImage(
+                              source: ImageSource.gallery);
+                          if (pickedFile != null) {
+                            final imageFile = File(pickedFile.path);
+                            // await uploadCashData(cash, imageFile);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Image Added Successfully'),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('No Image Selected'),
+                              ),
+                            );
+                            print('No image selected.');
+                          }
+                        },
+                        text: 'Upload Image',
                       ),
                       const SizedBox(height: 20),
                       CustomBtn(
