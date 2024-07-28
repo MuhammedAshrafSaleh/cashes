@@ -34,10 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
     // TODO: What is SchedulerBinding ?
     // TODO: Login Screen Is Shown and then going to the Home Screen
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      AuthManagerProvider authProvider =
-          Provider.of<AuthManagerProvider>(context, listen: false);
-      FirebaseAuthManager.checkUserState(
-          context: context, authProvider: authProvider);
+      // AuthManagerProvider authProvider =
+      //     Provider.of<AuthManagerProvider>(context, listen: false);
+      // FirebaseAuthManager.checkUserState(
+      //     context: context, authProvider: authProvider);
     });
   }
 

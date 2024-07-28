@@ -100,8 +100,11 @@ class FirebaseFirestoreManager {
         .set(cash);
   }
 
-  static Future updateCash(
-      {required cash, required projectId, required userId}) async {
+  static Future updateCash({
+    required cash,
+    required projectId,
+    required userId,
+  }) async {
     return getCashesCollections(userId: userId, projectId: projectId)
         .doc(cash.id)
         .update(cash.toFirestore());

@@ -1,4 +1,5 @@
 import 'package:cashes/app/models/project.dart';
+import 'package:cashes/app/screens/home/clients_money_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -34,20 +35,41 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     projectProvider = Provider.of<ProjectProvider>(context);
     authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
-    return SafeArea(
-      child: Scaffold(
-        body: ProjectListWidget(user: authProvider.currentUser),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: AppTheme.white,
-          onPressed: () {
-            showFormDialog(context);
-          },
-          child: const Icon(Icons.add, color: AppTheme.primaryColor),
-        ),
+    return Scaffold(
+      body: selectedIndex == 0
+          ? ProjectListWidget(user: authProvider.currentUser)
+          : ClientMoney(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppTheme.white,
+        onPressed: () {
+          showFormDialog(context);
+        },
+        child: const Icon(Icons.add, color: AppTheme.primaryColor),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (currentIndex) {
+          setState(() {
+            selectedIndex = currentIndex;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Projects',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.money),
+            label: 'Clients Transefer',
+          ),
+        ],
       ),
     );
   }

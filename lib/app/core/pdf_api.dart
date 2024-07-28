@@ -8,6 +8,7 @@ import 'package:path/path.dart' as path;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../models/invoice.dart';
+import 'package:http/http.dart' as http;
 
 class PdfApi {
   static createPdf(Invoice invoice) async {
@@ -52,12 +53,47 @@ class PdfApi {
       ),
     );
 
+    // Add a page for each image in invoice.items.image
+    for (var cash in invoice.items) {
+      if (cash.imageURl != null) {
+        final imageData = await _fetchImageData(cash.imageURl!);
+        doc.addPage(
+          pw.Page(
+            pageFormat: PdfPageFormat.a4,
+            build: (context) {
+              return pw.Column(children: [
+                pw.Text(cash.name!),
+                SizedBox(height: 10),
+                pw.Image(pw.MemoryImage(imageData!)),
+              ]);
+            },
+          ),
+        );
+      }
+    }
+
     final dir = await getTemporaryDirectory();
     const fileName = "sample.pdf";
     final savePath = path.join(dir.path, fileName);
     final file = File(savePath);
     await file.writeAsBytes(await doc.save());
     await OpenFilex.open(file.path);
+  }
+
+  // Helper method to fetch image data from a URL
+  static Future<Uint8List?> _fetchImageData(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      } else {
+        print('Failed to load image: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching image: $e');
+      return null;
+    }
   }
 
   static Widget buildHeader(

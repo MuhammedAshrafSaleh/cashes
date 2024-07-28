@@ -17,6 +17,16 @@ class AppTheme {
       backgroundColor: white,
       elevation: 0.0,
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: white,
+        elevation: 0.0,
+        selectedIconTheme: IconThemeData(
+          color: primaryColor,
+        ),
+        selectedLabelStyle: TextStyle(color: black),
+        unselectedIconTheme: IconThemeData(
+          color: midGrey,
+        )),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppTheme.white,
     ),

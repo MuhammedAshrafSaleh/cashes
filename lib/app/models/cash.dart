@@ -13,6 +13,7 @@ class Cash {
     required this.cashNumber,
     required this.price,
     required this.date,
+    this.imageURl,
   });
 
   Cash.fromFirestore(Map<String, dynamic> data)
@@ -22,6 +23,7 @@ class Cash {
           cashNumber: data['cashNumber'] as String,
           price: data['price'] as String,
           date: data['date'] as String,
+          imageURl: data['imageURl'] as String?,
         );
   Map<String, dynamic> toFirestore() {
     return {
@@ -30,6 +32,7 @@ class Cash {
       'cashNumber': cashNumber,
       'price': price,
       'date': date,
+      'imageURl': imageURl,
     };
   }
 }
