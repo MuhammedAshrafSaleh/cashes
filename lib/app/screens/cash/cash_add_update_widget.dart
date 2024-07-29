@@ -86,17 +86,50 @@ class AddUpdateTask extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomBtn(
                     onPressed: () async {
-                      final picker = ImagePicker();
-                      final pickedFile =
-                          await picker.pickImage(source: ImageSource.gallery);
-                      if (pickedFile != null) {
-                        print('Image Added Successfully');
-                        cashProvider.changeCurrentImage(File(pickedFile.path));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Image Added Successfully'),
-                          ),
-                        );
+                      // Show a dialog to let the user choose between camera and gallery
+                      final ImageSource? source = await showDialog<ImageSource>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Select Image Source'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.of(context)
+                                    .pop(ImageSource.camera),
+                                child: const Text('Camera'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context)
+                                    .pop(ImageSource.gallery),
+                                child: const Text('Gallery'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (source != null) {
+                        final picker = ImagePicker();
+                        final pickedFile =
+                            await picker.pickImage(source: source);
+
+                        if (pickedFile != null) {
+                          print('Image Added Successfully');
+                          cashProvider
+                              .changeCurrentImage(File(pickedFile.path));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Image Added Successfully'),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('No Image Selected'),
+                            ),
+                          );
+                          print('No image selected.');
+                        }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -139,6 +172,7 @@ class AddUpdateTask extends StatelessWidget {
                                 userId: authProvider.currentUser!.id,
                                 imageFile: cashProvider.currentImage,
                               );
+                        cashProvider.changeCurrentImage(null);
                         nameController.clear();
                         priceController.clear();
                         dateController.clear();

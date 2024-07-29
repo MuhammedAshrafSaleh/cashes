@@ -12,6 +12,7 @@ import '../../models/project.dart';
 import '../../providers/project_provider.dart';
 import 'cash_add_update_widget.dart';
 import 'cash_images_widget.dart';
+import 'clients_money_widget.dart';
 
 class CashScreen extends StatefulWidget {
   static const String routeName = 'Cash-Screen';
@@ -50,12 +51,12 @@ class _CashScreenState extends State<CashScreen> {
     });
   }
 
-  var cashProvider;
+  // var cashProvider;
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     var project = ModalRoute.of(context)!.settings.arguments as Project;
-    cashProvider = Provider.of<CashProvider>(context);
+    var cashProvider = Provider.of<CashProvider>(context);
     var authProvider = Provider.of<AuthManagerProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -77,11 +78,7 @@ class _CashScreenState extends State<CashScreen> {
           ),
         ],
       ),
-      body:  Column(
-        children: [
-          selectedIndex == 0 ? const CashListWidget() : const CashImagesWidget(),
-        ],
-      ),
+      body: screens[selectedIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showInvoiceDialog(context: context, isAdd: false);
@@ -105,10 +102,20 @@ class _CashScreenState extends State<CashScreen> {
             icon: Icon(Icons.image),
             label: 'Images',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.money_rounded),
+            label: 'Clients Transfer',
+          ),
         ],
       ),
     );
   }
+
+  List<Widget> screens = const [
+    CashListWidget(),
+    CashImagesWidget(),
+    ClientMoney(),
+  ];
 
   void showInvoiceDialog({
     required BuildContext context,

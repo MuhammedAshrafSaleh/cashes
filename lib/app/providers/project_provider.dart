@@ -5,10 +5,15 @@ import '../models/project.dart';
 
 class ProjectProvider extends ChangeNotifier {
   List cashes = [];
-  List<Project?> projects = [];
+  List projects = [];
   Project? currentProject;
-  void getProject({required Project project}) {
+  void changeProject({required Project? project}) {
     currentProject = project;
+    notifyListeners();
+  }
+
+  void changeProjects(newProjects) {
+    projects = newProjects;
     notifyListeners();
   }
 
@@ -17,9 +22,6 @@ class ProjectProvider extends ChangeNotifier {
   }) async {
     projects =
         await FirebaseFirestoreManager.getAllProjectByUserId(userId: uId);
-    for (var project in projects) {
-      print(project?.name ?? 'name null');
-    }
     notifyListeners();
   }
 

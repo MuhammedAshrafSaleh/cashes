@@ -9,11 +9,17 @@ import '../models/cash.dart';
 
 class CashProvider extends ChangeNotifier {
   List<Cash> cashes = [];
-  var currentImage;
+  File? currentImage;
   void changeCurrentImage(newImage) {
     currentImage = newImage;
     notifyListeners();
   }
+
+  void changeCashes(newCashes) {
+    cashes = newCashes;
+    notifyListeners();
+  }
+
   void getCashes({
     required String userId,
     required String projectId,
@@ -33,14 +39,11 @@ class CashProvider extends ChangeNotifier {
   }) async {
     if (imageFile != null) {
       var uuid = const Uuid();
-      String imageUrl = await FirebaseStorageManager.uploadImage(
+      String imageUrl = await FirebaseStorageManager.uploadCashImage(
         imageFile: imageFile,
         id: uuid.v4(),
       );
       cash.imageURl = imageUrl;
-      print("============================================");
-      print(imageUrl);
-      print("============================================");
     }
     await FirebaseFirestoreManager.addtCashesByUserIdAndProjectId(
       cash: cash,
@@ -58,14 +61,11 @@ class CashProvider extends ChangeNotifier {
   }) async {
     if (imageFile != null) {
       var uuid = const Uuid();
-      String imageUrl = await FirebaseStorageManager.uploadImage(
+      String imageUrl = await FirebaseStorageManager.uploadCashImage(
         imageFile: imageFile,
         id: uuid.v4(),
       );
       cash.imageURl = imageUrl;
-      print("============================================");
-      print(imageUrl);
-      print("============================================");
     }
     await FirebaseFirestoreManager.updateCash(
       cash: cash,

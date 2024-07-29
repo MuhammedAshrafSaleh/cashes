@@ -1,12 +1,10 @@
 import 'package:cashes/app/screens/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:provider/provider.dart';
 
 import '../../core/firebase configurations/firebase_auth_manager.dart';
 import '../../core/regex.dart';
 import '../../core/theme.dart';
-import '../../providers/auth_manager_provider.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_text_btn.dart';
 import '../../widget/custom_textfield.dart';

@@ -46,21 +46,21 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
         suffixIcon: const Icon(Icons.calendar_today),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             style: BorderStyle.none,
             color: AppTheme.grey,
           ), // Change border color here
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppTheme.grey,
             width: 2.0,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppTheme.primaryColor,
           ),
         ),

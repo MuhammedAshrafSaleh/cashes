@@ -71,55 +71,15 @@ class _CashListWidgetState extends State<CashListWidget> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        // onSort: (columnIndex, _) {
-        //   setState(() {
-        //     if (_isSortAsc) {
-        //       cashProvider.cashes.sort((a, b) => a.date!.compareTo(b.date!));
-        //     } else {
-        //       cashProvider.cashes.sort((a, b) => b.date!.compareTo(a.date!));
-        //     }
-        //     _isSortAsc = !_isSortAsc;
-        //   });
-        // },
       ),
-      // DataColumn(
-      //   label: const Expanded(
-      //       child: Text(
-      //     'رقم الإيصال',
-      //     textAlign: TextAlign.center,
-      //     style: TextStyle(fontWeight: FontWeight.bold),
-      //   )),
-      //   onSort: (columnIndex, _) {
-      //     setState(() {
-      //       if (_isSortAsc) {
-      //         cashProvider.cashes
-      //             .sort((a, b) => a.cashNumber!.compareTo(b.cashNumber!));
-      //       } else {
-      //         cashProvider.cashes
-      //             .sort((a, b) => b.cashNumber!.compareTo(a.cashNumber!));
-      //       }
-      //       _isSortAsc = !_isSortAsc;
-      //     });
-      //   },
-      // ),
-      DataColumn(
-        label: const Expanded(
+      const DataColumn(
+        label: Expanded(
           child: Text(
             'البيان',
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        onSort: (columnIndex, _) {
-          setState(() {
-            if (_isSortAsc) {
-              cashProvider.cashes.sort((a, b) => a.name!.compareTo(b.name!));
-            } else {
-              cashProvider.cashes.sort((a, b) => b.name!.compareTo(a.name!));
-            }
-            _isSortAsc = !_isSortAsc;
-          });
-        },
       ),
       DataColumn(
         label: const Expanded(

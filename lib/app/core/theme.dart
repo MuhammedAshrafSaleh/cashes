@@ -9,7 +9,7 @@ class AppTheme {
   static const Color midGrey = Color(0xFF8391A1);
   static const Color darkGrey = Color(0xFF6A707C);
   static const Color simpleGrey = Color(0xFFDADADA);
-  static const Color black = Color(0xFF111111);
+  static const Color black = Color(0xFF000000);
   static Color lightBlue = const Color(0xFF5D9CEC);
 
   static ThemeData lightMode = ThemeData(
@@ -18,15 +18,16 @@ class AppTheme {
       elevation: 0.0,
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: white,
-        elevation: 0.0,
-        selectedIconTheme: IconThemeData(
-          color: primaryColor,
-        ),
-        selectedLabelStyle: TextStyle(color: black),
-        unselectedIconTheme: IconThemeData(
-          color: midGrey,
-        )),
+      backgroundColor: white,
+      elevation: 0.0,
+      selectedIconTheme: IconThemeData(
+        color: primaryColor,
+      ),
+      selectedLabelStyle: TextStyle(color: black, fontWeight: FontWeight.w700),
+      unselectedIconTheme: IconThemeData(
+        color: midGrey,
+      ),
+    ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppTheme.white,
     ),

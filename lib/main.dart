@@ -1,6 +1,7 @@
 import 'package:cashes/app/core/theme.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/cash_provider.dart';
+import 'package:cashes/app/providers/clients_transefer_provider.dart';
 import 'package:cashes/app/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -29,6 +30,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => AuthManagerProvider()),
         ChangeNotifierProvider(create: (context) => ProjectProvider()),
         ChangeNotifierProvider(create: (context) => CashProvider()),
+        ChangeNotifierProvider(create: (context) => ClientsTranseferProvider()),
       ],
       child: const MyApp(),
     ),
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
         RegisterScreen.routeName: (_) => RegisterScreen(),
         LoginScreen.routeName: (_) => LoginScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
-        CashScreen.routeName: (_) => CashScreen(),
+        CashScreen.routeName: (_) => const CashScreen(),
       },
     );
   }

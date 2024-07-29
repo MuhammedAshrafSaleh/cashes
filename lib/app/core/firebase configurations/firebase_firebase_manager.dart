@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../models/app_user.dart';
 import '../../models/cash.dart';
+import '../../models/client_transefer.dart';
 import '../../models/project.dart';
 
 class FirebaseFirestoreManager {
@@ -118,5 +118,62 @@ class FirebaseFirestoreManager {
     return getCashesCollections(userId: userId, projectId: projectId)
         .doc(cash.id)
         .delete();
+  }
+
+  static CollectionReference<ClientTransefer> getClientsTranferCollection(
+      {required userId, required projectId}) {
+    return getUsersCollection()
+        .doc(userId)
+        .collection(Project.collectionName)
+        .doc(projectId)
+        .collection(ClientTransefer.collectionName)
+        .withConverter(
+          fromFirestore: (snapshot, options) =>
+              ClientTransefer.fromFirestore(snapshot.data()!),
+          toFirestore: (client, options) => client.toFirestore(),
+        );
+  }
+
+  static Future<List<ClientTransefer>> getAllClientTransfers({
+    required userId,
+    required projectId,
+  }) async {
+    return getClientsTranferCollection(userId: userId, projectId: projectId)
+        .get()
+        .then((clientTransfer) {
+      return clientTransfer.docs
+          .map((clientTransfer) => clientTransfer.data())
+          .toList();
+    });
+  }
+
+  static Future addClientTranserfer({
+    required userId,
+    required projectId,
+    required ClientTransefer client,
+  }) async {
+    return getClientsTranferCollection(userId: userId, projectId: projectId)
+        .doc(client.id)
+        .set(client);
+  }
+
+  static Future deleteClientTransfer({
+    required userId,
+    required projectId,
+    required ClientTransefer client,
+  }) async {
+    return getClientsTranferCollection(userId: userId, projectId: projectId)
+        .doc(client.id)
+        .delete();
+  }
+
+  static Future updateClientTransfer({
+    required userId,
+    required projectId,
+    required ClientTransefer client,
+  }) async {
+    return getCashesCollections(userId: userId, projectId: projectId)
+        .doc(client.id)
+        .update(client.toFirestore());
   }
 }

@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme.dart';
-import '../../models/project.dart';
-import '../../widget/custom_btn.dart';
-import '../../widget/custom_textfield.dart';
+import 'add_project_widget.dart';
 
 // ignore: must_be_immutable
 class ProjectItem extends StatelessWidget {
@@ -54,7 +52,11 @@ class ProjectItem extends StatelessWidget {
             SlidableAction(
               flex: 2,
               onPressed: (context) {
-                showFormDialog(context);
+                showProjectDialog(
+                  context: context,
+                  isAdd: false,
+                  project: project,
+                );
               },
               backgroundColor: AppTheme.lightBlue,
               foregroundColor: Colors.white,
@@ -71,7 +73,7 @@ class ProjectItem extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              projectProvider.getProject(project: project);
+              projectProvider.changeProject(project: project);
               Navigator.pushNamed(
                 context,
                 CashScreen.routeName,
@@ -131,110 +133,17 @@ class ProjectItem extends StatelessWidget {
     );
   }
 
-  void showFormDialog(BuildContext context) {
-    GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final nameController = TextEditingController(text: project.name);
-    final moneyController = TextEditingController(text: project.money);
-    final typeController = TextEditingController(text: project.type);
+  void showProjectDialog({
+    required BuildContext context,
+    required bool isAdd,
+    project,
+  }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppTheme.white,
-          title: const Text(
-            'Project Details',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomTextFormField(
-                        controller: nameController,
-                        text: 'Please Enter Project Name',
-                        keyboardType: TextInputType.text,
-                        hasIcon: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter project name';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      CustomTextFormField(
-                        controller: moneyController,
-                        text: 'Please Enter The Money',
-                        keyboardType: TextInputType.number,
-                        hasIcon: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter add money';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      CustomTextFormField(
-                        controller: typeController,
-                        text: 'Please Enter the type',
-                        keyboardType: TextInputType.text,
-                        hasIcon: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the type';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      CustomBtn(
-                        text: 'Update Project',
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            print("=================================");
-                            print(project.id);
-                            print(project.name);
-                            print(project.money);
-                            print("=================================");
-                            projectProvider.updateProject(
-                              project: Project(
-                                id: project.id,
-                                name: nameController.text,
-                                money: moneyController.text,
-                                date: project.date,
-                                type: typeController.text,
-                                userId: user.id,
-                              ),
-                              userId: user.id,
-                            );
-                            print(nameController.text);
-                            print(moneyController.text);
-                            nameController.clear();
-                            moneyController.clear();
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Updated successfully!'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+        return AddUpdateProject(
+          isAdd: isAdd,
+          project: project,
         );
       },
     );

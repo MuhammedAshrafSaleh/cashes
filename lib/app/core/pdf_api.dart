@@ -59,7 +59,14 @@ class PdfApi {
         final imageData = await _fetchImageData(cash.imageURl!);
         doc.addPage(
           pw.Page(
+            textDirection: TextDirection.rtl,
             pageFormat: PdfPageFormat.a4,
+            theme: pw.ThemeData(
+              defaultTextStyle: pw.TextStyle(
+                fontSize: 10,
+                font: fontFamily,
+              ),
+            ),
             build: (context) {
               return pw.Column(children: [
                 pw.Text(cash.name!),
@@ -182,8 +189,8 @@ class PdfApi {
     }).toList();
     if (data.length < 25) {
       for (int i = data.length; i < 25; i++) {
-        int index = i + 1;
-        String number = index.toString();
+        // int index = i + 1;
+        // String number = index.toString();
         data.add([
           '',
           '',
