@@ -6,9 +6,11 @@ Widget imageCard({
   required ImageProvider image,
   required String name,
   required BuildContext context,
+  bool edit = false,
+  onPressed,
 }) {
   return AspectRatio(
-    aspectRatio: 2 / 3,
+    aspectRatio: 2.8 / 3,
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
       child: ClipRRect(
@@ -52,16 +54,38 @@ Widget imageCard({
                 ),
               ),
               child: Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 15.0, bottom: 15),
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                      color: AppTheme.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                alignment: Alignment.bottomCenter,
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0, bottom: 15),
+                        child: Text(
+                          name,
+                          style: const TextStyle(
+                            color: AppTheme.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      edit
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15.0, bottom: 15),
+                              child: IconButton(
+                                onPressed: onPressed,
+                                icon: const Icon(
+                                  Icons.edit,
+                                  size: 30,
+                                  color: AppTheme.white,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
                   ),
                 ),
               ),

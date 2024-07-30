@@ -10,26 +10,21 @@ class CashImagesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cashProvider = Provider.of<CashProvider>(context);
-    return Expanded(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: cashProvider.cashes.length,
-        itemBuilder: (context, index) {
-          String imageUrl = cashProvider.cashes[index].imageURl ?? '';
-          String name = cashProvider.cashes[index].name!;
-          return Column(
-            children: [
-              imageCard(
-                image: imageUrl != ''
-                    ? NetworkImage(imageUrl)
-                    : const AssetImage('assets/images/no_image.png'),
-                name: name,
-                context: context,
-              ),
-            ],
-          );
-        },
-      ),
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      itemCount: cashProvider.cashes.length,
+      itemBuilder: (context, index) {
+        String imageUrl = cashProvider.cashes[index].imageURl ?? '';
+        String name = cashProvider.cashes[index].name!;
+        return imageCard(
+          image: imageUrl != ''
+              ? NetworkImage(imageUrl)
+              : const AssetImage('assets/images/no_image.png'),
+          name: name,
+          context: context,
+        
+        );
+      },
     );
   }
 }

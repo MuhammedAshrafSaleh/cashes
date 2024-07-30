@@ -1,4 +1,5 @@
 import 'package:cashes/app/core/firebase%20configurations/firebase_firebase_manager.dart';
+import 'package:cashes/app/models/cash.dart';
 import 'package:flutter/material.dart';
 
 import '../models/project.dart';
@@ -22,6 +23,18 @@ class ProjectProvider extends ChangeNotifier {
   }) async {
     projects =
         await FirebaseFirestoreManager.getAllProjectByUserId(userId: uId);
+    // for (var project in projects) {
+    //   List<Cash> cashes = await FirebaseFirestoreManager.getAllCashes(
+    //     userId: uId,
+    //     projectId: project.id,
+    //   );
+    //   var total = 0;
+    //   for (var cash in cashes) {
+    //     total += int.parse(cash.price ?? '');
+    //     print("total= $total");
+    //   }
+    //   project.money = total.toString();
+    // }
     notifyListeners();
   }
 

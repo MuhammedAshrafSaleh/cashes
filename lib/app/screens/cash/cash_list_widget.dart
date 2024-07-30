@@ -29,16 +29,14 @@ class _CashListWidgetState extends State<CashListWidget> {
         ? EmptyScreen(message: 'No Invoices Yet!')
         : Directionality(
             textDirection: TextDirection.rtl,
-            child: Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    border: TableBorder.all(),
-                    columns: _createColumn(),
-                    rows: _createRows(),
-                  ),
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  border: TableBorder.all(),
+                  columns: _createColumn(),
+                  rows: _createRows(),
                 ),
               ),
             ),
@@ -164,7 +162,7 @@ class _CashListWidgetState extends State<CashListWidget> {
                       deleteFunction: () {
                         cashProvider.deleteCash(
                           userId: authProvider.currentUser.id,
-                          projectId: projectProvider.currentProject.id,
+                          project: projectProvider.currentProject,
                           cash: cash,
                         );
                       });

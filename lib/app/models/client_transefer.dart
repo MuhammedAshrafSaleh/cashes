@@ -7,7 +7,7 @@ class ClientTransefer {
   ClientTransefer({
     required this.id,
     required this.name,
-    required this.imageURL,
+    this.imageURL,
   });
 
   ClientTransefer.fromFirestore(Map<String, dynamic> data)

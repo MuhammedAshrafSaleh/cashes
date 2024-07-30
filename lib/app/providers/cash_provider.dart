@@ -22,11 +22,20 @@ class CashProvider extends ChangeNotifier {
 
   void getCashes({
     required String userId,
-    required String projectId,
+    required project,
   }) async {
     cashes = await FirebaseFirestoreManager.getAllCashes(
       userId: userId,
-      projectId: projectId,
+      projectId: project.id,
+    );
+    int total = 0;
+    for (var cash in cashes) {
+      total += int.parse(cash.price ?? '');
+    }
+    project.money = total.toString();
+    await FirebaseFirestoreManager.updateProject(
+      project: project,
+      userId: userId,
     );
     notifyListeners();
   }
@@ -34,7 +43,7 @@ class CashProvider extends ChangeNotifier {
   Future addCash({
     required cash,
     required userId,
-    required projectId,
+    required project,
     File? imageFile,
   }) async {
     if (imageFile != null) {
@@ -48,14 +57,14 @@ class CashProvider extends ChangeNotifier {
     await FirebaseFirestoreManager.addtCashesByUserIdAndProjectId(
       cash: cash,
       userId: userId,
-      projectId: projectId,
+      projectId: project.id,
     );
-    getCashes(userId: userId, projectId: projectId);
+    getCashes(userId: userId, project: project);
   }
 
   void updateCash({
     required Cash cash,
-    required projectId,
+    required project,
     required userId,
     imageFile,
   }) async {
@@ -69,23 +78,23 @@ class CashProvider extends ChangeNotifier {
     }
     await FirebaseFirestoreManager.updateCash(
       cash: cash,
-      projectId: projectId,
+      projectId: project.id,
       userId: userId,
     );
-    getCashes(projectId: projectId, userId: userId);
+    getCashes(userId: userId, project: project);
   }
 
   void deleteCash({
     required cash,
     required userId,
-    required projectId,
+    required project,
   }) async {
     await FirebaseFirestoreManager.deleteCashByUserIdAndProjectId(
       userId: userId,
-      projectId: projectId,
+      projectId: project.id,
       cash: cash,
     );
     await FirebaseStorageManager.deleteCashImage(cashId: cash.id);
-    getCashes(userId: userId, projectId: projectId);
+    getCashes(userId: userId, project: project);
   }
 }

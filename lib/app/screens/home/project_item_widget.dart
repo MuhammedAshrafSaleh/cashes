@@ -95,7 +95,7 @@ class ProjectItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${project.money}\$',
+                      '${project.money ?? '0'}\$',
                       style: const TextStyle(
                         color: AppTheme.white,
                         fontSize: 20,

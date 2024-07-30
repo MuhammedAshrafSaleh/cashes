@@ -10,7 +10,7 @@ class Project {
   Project({
     required this.id,
     required this.name,
-    required this.money,
+    this.money,
     required this.date,
     required this.type,
     required this.userId,
@@ -20,7 +20,7 @@ class Project {
       : this(
           id: data['id'] as String,
           name: data['name'] as String,
-          money: data['money'] as String,
+          // money: data['money'] as String,
           date: data['date'] as String,
           type: data['type'] as String,
           userId: data['userId'] as String,
@@ -30,7 +30,7 @@ class Project {
     return {
       'id': id,
       'name': name,
-      'money': money,
+      // 'money': money,
       'date': date,
       'type': type,
       'userId': userId,

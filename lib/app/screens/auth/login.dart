@@ -20,11 +20,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController =
-      TextEditingController(text: 'ashraf@gmail.com');
+  final TextEditingController _emailController = TextEditingController();
 
-  final TextEditingController _passwordController =
-      TextEditingController(text: '123456');
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -65,10 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   'Zmzm Invoices',
                   style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.black
-                  ),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.black),
                 ),
                 Form(
                   key: _formKey,

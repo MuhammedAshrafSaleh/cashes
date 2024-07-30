@@ -22,8 +22,8 @@ class AddUpdateProject extends StatelessWidget {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final nameController =
         TextEditingController(text: isAdd ? '' : project!.name);
-    final moneyController =
-        TextEditingController(text: isAdd ? '' : project!.money);
+    // final moneyController =
+    //     TextEditingController(text: isAdd ? '' : project!.money);
     final typeController =
         TextEditingController(text: isAdd ? '' : project!.type);
     return AlertDialog(
@@ -57,19 +57,6 @@ class AddUpdateProject extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CustomTextFormField(
-                    controller: moneyController,
-                    text: 'Please Enter The Money',
-                    keyboardType: TextInputType.number,
-                    hasIcon: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter add money';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomTextFormField(
                     controller: typeController,
                     text: 'Please Enter the type',
                     keyboardType: TextInputType.text,
@@ -92,7 +79,7 @@ class AddUpdateProject extends StatelessWidget {
                                 project: Project(
                                   id: uuid.v4(),
                                   name: nameController.text,
-                                  money: moneyController.text,
+                                  // money: moneyController.text,
                                   date: formatDate(DateTime.now().toString()),
                                   type: typeController.text,
                                   userId: authProvider.currentUser!.id!,
@@ -103,7 +90,7 @@ class AddUpdateProject extends StatelessWidget {
                                 project: Project(
                                   id: project!.id,
                                   name: nameController.text,
-                                  money: moneyController.text,
+                                  // money: moneyController.text,
                                   date: project!.date,
                                   type: typeController.text,
                                   userId: authProvider.currentUser!.id,
@@ -111,9 +98,9 @@ class AddUpdateProject extends StatelessWidget {
                                 userId: authProvider.currentUser!.id,
                               );
                         print(nameController.text);
-                        print(moneyController.text);
+                        // print(moneyController.text);
                         nameController.clear();
-                        moneyController.clear();
+                        // moneyController.clear();
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

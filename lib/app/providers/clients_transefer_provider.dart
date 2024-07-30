@@ -8,8 +8,14 @@ import 'package:uuid/uuid.dart';
 
 class ClientsTranseferProvider extends ChangeNotifier {
   List<ClientTransefer>? clintes = [];
+  File? currentImage;
   void changeClients(List<ClientTransefer>? newClients) {
     clintes = newClients;
+    notifyListeners();
+  }
+
+  void changeCurrentImage(newImage) {
+    currentImage = newImage;
     notifyListeners();
   }
 

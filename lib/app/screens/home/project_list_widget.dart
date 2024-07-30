@@ -18,73 +18,75 @@ class ProjectListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var cashProvider = Provider.of<CashProvider>(context);
     var name = user.name ?? 'Zmzm User';
-    return Consumer<ProjectProvider>(builder: (
-      BuildContext context,
-      ProjectProvider projectProvider,
-      Widget? child,
-    ) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome, $name',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryColor,
+    return Consumer<ProjectProvider>(
+      builder: (
+        BuildContext context,
+        ProjectProvider projectProvider,
+        Widget? child,
+      ) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome, $name',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primaryColor,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Here\'re your projects, $name',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.black,
+                      Text(
+                        'Here\'re your projects, $name',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.black,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                IconButton(
-                    onPressed: () {
-                      FirebaseAuthManager.signOut();
-                      projectProvider.changeProject(project: null);
-                      projectProvider.changeProjects([]);
-                      cashProvider.changeCurrentImage(null);
-                      cashProvider.changeCashes(<Cash>[]);
-                      Navigator.pushReplacementNamed(
-                        context,
-                        LoginScreen.routeName,
-                      );
-                    },
-                    icon: const Icon(Icons.logout)),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: projectProvider.projects.isEmpty
-                  ? EmptyScreen(message: 'No Projects Yet!')
-                  : ListView.builder(
-                      itemCount: projectProvider.projects.length,
-                      itemBuilder: (context, index) {
-                        return ProjectItem(
-                          project: projectProvider.projects[index],
-                          user: user,
+                    ],
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        FirebaseAuthManager.signOut();
+                        projectProvider.changeProject(project: null);
+                        projectProvider.changeProjects([]);
+                        cashProvider.changeCurrentImage(null);
+                        cashProvider.changeCashes(<Cash>[]);
+                        Navigator.pushReplacementNamed(
+                          context,
+                          LoginScreen.routeName,
                         );
                       },
-                    ),
-            )
-          ],
-        ),
-      );
-    });
+                      icon: const Icon(Icons.logout)),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: projectProvider.projects.isEmpty
+                    ? EmptyScreen(message: 'No Projects Yet!')
+                    : ListView.builder(
+                        itemCount: projectProvider.projects.length,
+                        itemBuilder: (context, index) {
+                          return ProjectItem(
+                            project: projectProvider.projects[index],
+                            user: user,
+                          );
+                        },
+                      ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 }

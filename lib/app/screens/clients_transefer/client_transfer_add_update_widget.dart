@@ -6,34 +6,28 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/theme.dart';
-import '../../models/cash.dart';
+import '../../models/client_transefer.dart';
 import '../../providers/auth_manager_provider.dart';
-import '../../providers/cash_provider.dart';
+import '../../providers/clients_transefer_provider.dart';
 import '../../providers/project_provider.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_textfield.dart';
-import '../../widget/date_picker.dart';
 
-class AddUpdateTask extends StatelessWidget {
-  final bool isAdd;
-  final int? index;
-  const AddUpdateTask({super.key, required this.isAdd, this.index});
+class AddUpdateClientTransefer extends StatelessWidget {
+  AddUpdateClientTransefer({super.key, required this.isAdd, this.index});
+  bool isAdd;
+  var index;
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<AuthManagerProvider>(context);
-    var cashProvider = Provider.of<CashProvider>(context);
+    var clientTranferProvider = Provider.of<ClientsTranseferProvider>(context);
     var projectProvider = Provider.of<ProjectProvider>(context);
+    var authProvider = Provider.of<AuthManagerProvider>(context);
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final nameController = TextEditingController(
-        text: isAdd ? cashProvider.cashes[index!].name : '');
-    final priceController = TextEditingController(
-        text: isAdd ? cashProvider.cashes[index!].price : '');
-    final dateController = TextEditingController(
-        text: isAdd ? cashProvider.cashes[index!].date : '');
+    var nameController = TextEditingController();
     return AlertDialog(
       backgroundColor: AppTheme.white,
       title: const Text(
-        'Cash Details',
+        'Invoice Date',
         style: TextStyle(
           fontWeight: FontWeight.bold,
         ),
@@ -45,40 +39,15 @@ class AddUpdateTask extends StatelessWidget {
             Form(
               key: formKey,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomTextFormField(
                     controller: nameController,
-                    text: 'Cash Name',
+                    text: 'Client Transfer Name',
                     keyboardType: TextInputType.text,
                     hasIcon: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter cash name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomTextFormField(
-                    controller: priceController,
-                    text: 'Price',
-                    keyboardType: TextInputType.number,
-                    hasIcon: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the price';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  DatePickerFormField(
-                    controller: dateController,
-                    text: 'Cash date',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your date';
+                        return 'Please enter client transfer name';
                       }
                       return null;
                     },
@@ -115,7 +84,7 @@ class AddUpdateTask extends StatelessWidget {
 
                         if (pickedFile != null) {
                           print('Image Added Successfully');
-                          cashProvider
+                          clientTranferProvider
                               .changeCurrentImage(File(pickedFile.path));
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -143,56 +112,48 @@ class AddUpdateTask extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CustomBtn(
-                    text: isAdd ? 'Update Cash' : 'Add Cash',
+                    text: 'Add Client Transfer',
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         var uuid = const Uuid();
                         isAdd
-                            ? cashProvider.updateCash(
-                                cash: Cash(
-                                  id: cashProvider.cashes[index!].id,
-                                  name: nameController.text,
-                                  cashNumber: '',
-                                  price: priceController.text,
-                                  date: dateController.text,
-                                ),
-                                project: projectProvider.currentProject,
-                                userId: authProvider.currentUser!.id,
-                                imageFile: cashProvider.currentImage,
-                              )
-                            : cashProvider.addCash(
-                                cash: Cash(
+                            ? clientTranferProvider.addClientTranserfer(
+                                client: ClientTransefer(
                                   id: uuid.v4(),
                                   name: nameController.text,
-                                  cashNumber: '',
-                                  price: priceController.text,
-                                  date: dateController.text,
                                 ),
-                                project: projectProvider.currentProject,
+                                projectId: projectProvider.currentProject!.id,
                                 userId: authProvider.currentUser!.id,
-                                imageFile: cashProvider.currentImage,
+                                imageFile: clientTranferProvider.currentImage,
+                              )
+                            : clientTranferProvider.updateClientTransfer(
+                                client: ClientTransefer(
+                                  id: uuid.v4(),
+                                  name: clientTranferProvider.clintes![index].name,
+                                ),
+                                projectId: projectProvider.currentProject!.id,
+                                userId: authProvider.currentUser!.id,
+                                imageFile: clientTranferProvider.currentImage,
                               );
-                        cashProvider.changeCurrentImage(null);
+                        clientTranferProvider.changeCurrentImage(null);
                         nameController.clear();
-                        priceController.clear();
-                        dateController.clear();
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
                               isAdd
-                                  ? 'Updated successfully'
-                                  : 'Added successfully',
+                                  ? 'Added successfully'
+                                  : 'Updated successfully',
                             ),
                             duration: const Duration(seconds: 2),
                           ),
                         );
                       }
                     },
-                  ),
+                  )
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),

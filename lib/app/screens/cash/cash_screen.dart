@@ -2,6 +2,7 @@ import 'package:cashes/app/core/pdf_api.dart';
 import 'package:cashes/app/models/invoice.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/cash_provider.dart';
+import 'package:cashes/app/providers/clients_transefer_provider.dart';
 import 'package:cashes/app/screens/cash/cash_list_widget.dart';
 import 'package:cashes/app/widget/custom_btn.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,8 @@ import '../../providers/project_provider.dart';
 import '../../widget/date_picker.dart';
 import 'cash_add_update_widget.dart';
 import 'cash_images_widget.dart';
-import 'clients_money_widget.dart';
+import '../clients_transefer/client_transfer_add_update_widget.dart';
+import '../clients_transefer/clients_money_widget.dart';
 
 class CashScreen extends StatefulWidget {
   static const String routeName = 'Cash-Screen';
@@ -48,9 +50,14 @@ class _CashScreenState extends State<CashScreen> {
       final authProvider =
           Provider.of<AuthManagerProvider>(context, listen: false);
       final cashProvider = Provider.of<CashProvider>(context, listen: false);
+      final clientTranseferProvider =
+          Provider.of<ClientsTranseferProvider>(context, listen: false);
+      clientTranseferProvider.getAllClientTransfers(
+          userId: authProvider.currentUser!.id!,
+          projectId: projectProvider.currentProject!.id!);
       cashProvider.getCashes(
         userId: authProvider.currentUser!.id!,
-        projectId: projectProvider.currentProject!.id!,
+        project: projectProvider.currentProject,
       );
     });
   }
@@ -165,7 +172,10 @@ class _CashScreenState extends State<CashScreen> {
           ),
         ],
       ),
-      body: Stack(
+      body:
+          // screens[selectedIndex],
+
+          Stack(
         children: [
           screens[selectedIndex],
           isLoading
@@ -185,7 +195,11 @@ class _CashScreenState extends State<CashScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showInvoiceDialog(context: context, isAdd: false);
+          if (selectedIndex == 2) {
+            showClientTransferDialog(context: context, isAdd: true);
+          } else {
+            showInvoiceDialog(context: context, isAdd: false);
+          }
         },
         child: const Icon(Icons.add, color: AppTheme.primaryColor),
       ),
@@ -233,67 +247,13 @@ class _CashScreenState extends State<CashScreen> {
       },
     );
   }
+
+  showClientTransferDialog({required BuildContext context, required isAdd}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AddUpdateClientTransefer(isAdd: isAdd);
+      },
+    );
+  }
 }
-
-// void showPrintDialog({
-//   required BuildContext context,
-//   required onPressed,
-// }) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return DateDialog(onPressed: onPressed);
-//     },
-//   );
-// }
-
-// ignore: must_be_immutable
-// class DateDialog extends StatelessWidget {
-//   DateDialog({super.key, this.onPressed});
-//   Function? onPressed;
-//   @override
-//   Widget build(BuildContext context) {
-//     GlobalKey<FormState> formKey = GlobalKey<FormState>();
-//     var dateController = TextEditingController();
-//     return AlertDialog(
-//       backgroundColor: AppTheme.white,
-//       title: const Text(
-//         'Invoice Date',
-//         style: TextStyle(
-//           fontWeight: FontWeight.bold,
-//         ),
-//       ),
-//       content: SingleChildScrollView(
-//         scrollDirection: Axis.vertical,
-//         child: Column(
-//           children: [
-//             Form(
-//               key: formKey,
-//               child: Column(
-//                 children: [
-//                   DatePickerFormField(
-//                     controller: dateController,
-//                     text: 'Cash date',
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter invoice date';
-//                       }
-//                       return null;
-//                     },
-//                   ),
-//                   const SizedBox(height: 20),
-//                   CustomBtn(
-//                     text: 'Print Invoice',
-//                     onPressed: () {
-//                       onPressed!.call();
-//                     },
-//                   )
-//                 ],
-//               ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -12,14 +12,11 @@ class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
   static const routeName = 'RegisterScreen';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController =
-      TextEditingController(text: 'a@gmail.com');
-  final TextEditingController _nameController =
-      TextEditingController(text: 'Ashraf');
-  final TextEditingController _passwordController =
-      TextEditingController(text: '123456');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmedPasswordController =
-      TextEditingController(text: '123456');
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
