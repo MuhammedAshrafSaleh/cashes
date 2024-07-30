@@ -85,6 +85,7 @@ class CashProvider extends ChangeNotifier {
       projectId: projectId,
       cash: cash,
     );
+    await FirebaseStorageManager.deleteCashImage(cashId: cash.id);
     getCashes(userId: userId, projectId: projectId);
   }
 }

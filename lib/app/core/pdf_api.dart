@@ -42,6 +42,7 @@ class PdfApi {
                 font: cairoBold,
                 projectName: invoice.projectName,
                 engineerName: invoice.engineerName,
+                invoiceDate: invoice.date,
               ),
               buildInvoice(invoice, cairoBold),
               buildTotal(invoice, cairoBold),
@@ -84,7 +85,7 @@ class PdfApi {
     final savePath = path.join(dir.path, fileName);
     final file = File(savePath);
     await file.writeAsBytes(await doc.save());
-    await OpenFilex.open(file.path);
+    return file;
   }
 
   // Helper method to fetch image data from a URL
@@ -103,10 +104,12 @@ class PdfApi {
     }
   }
 
-  static Widget buildHeader(
-      {required font,
-      required String projectName,
-      required String engineerName}) {
+  static Widget buildHeader({
+    required font,
+    required String projectName,
+    required String engineerName,
+    required String invoiceDate,
+  }) {
     return Column(
       children: [
         Container(
@@ -129,7 +132,9 @@ class PdfApi {
               Expanded(
                   child: textBold(
                       text: 'مشرف الموقع : $engineerName', font: font)),
-              Expanded(child: textBold(text: 'تاريخ العهده :', font: font)),
+              Expanded(
+                  child: textBold(
+                      text: 'تاريخ العهده : $invoiceDate', font: font)),
             ],
           ),
         ),

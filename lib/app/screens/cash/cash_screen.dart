@@ -3,13 +3,17 @@ import 'package:cashes/app/models/invoice.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/cash_provider.dart';
 import 'package:cashes/app/screens/cash/cash_list_widget.dart';
+import 'package:cashes/app/widget/custom_btn.dart';
 import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/theme.dart';
+import '../../core/utls.dart';
 import '../../models/project.dart';
 import '../../providers/project_provider.dart';
+import '../../widget/date_picker.dart';
 import 'cash_add_update_widget.dart';
 import 'cash_images_widget.dart';
 import 'clients_money_widget.dart';
@@ -53,6 +57,7 @@ class _CashScreenState extends State<CashScreen> {
 
   // var cashProvider;
   int selectedIndex = 0;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     var project = ModalRoute.of(context)!.settings.arguments as Project;
@@ -66,19 +71,118 @@ class _CashScreenState extends State<CashScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              PdfApi.createPdf(
-                Invoice(
-                  projectName: project.name!,
-                  engineerName: authProvider.currentUser!.name!,
-                  items: cashProvider.cashes,
-                ),
+              // showPrintDialog(
+              //   context: context,
+              //   onPressed: () {
+              //     PdfApi.createPdf(
+              //       Invoice(
+              //         projectName: project.name!,
+              //         engineerName: authProvider.currentUser!.name!,
+              //         items: cashProvider.cashes,
+              //         date: '30-07-2024',
+              //       ),
+              //     );
+              //   },
+              // );
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+                  var dateController = TextEditingController();
+                  return AlertDialog(
+                    backgroundColor: AppTheme.white,
+                    title: const Text(
+                      'Invoice Date',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: [
+                          Form(
+                            key: formKey,
+                            child: Column(
+                              children: [
+                                DatePickerFormField(
+                                  controller: dateController,
+                                  text: 'Cash date',
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter invoice date';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                CustomBtn(
+                                  text: 'Print Invoice',
+                                  onPressed: () async {
+                                    if (formKey.currentState!.validate()) {
+                                      setState(() {
+                                        isLoading = true;
+                                        print(
+                                            'isLoading===========================================');
+                                      });
+                                      Navigator.pop(context);
+                                      try {
+                                        final pdfFile = await PdfApi.createPdf(
+                                          Invoice(
+                                            projectName: project.name!,
+                                            engineerName:
+                                                authProvider.currentUser!.name!,
+                                            items: cashProvider.cashes,
+                                            date: formatDateWithoutTime(
+                                                dateController.text),
+                                          ),
+                                        );
+
+                                        await OpenFilex.open(pdfFile.path);
+                                      } catch (e) {
+                                        print('Failed to open PDF: $e');
+                                      } finally {
+                                        setState(() {
+                                          isLoading = false;
+                                          print(
+                                              'loaded===========================================');
+                                        });
+                                      }
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
               );
             },
             icon: const Icon(Icons.print),
           ),
         ],
       ),
-      body: screens[selectedIndex],
+      body: Stack(
+        children: [
+          screens[selectedIndex],
+          isLoading
+              ? const Center(
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      color: AppTheme.primaryColor,
+                    ),
+                    SizedBox(width: 10),
+                    Text('PDF is Opeing Now...')
+                  ],
+                ))
+              : const Center(),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showInvoiceDialog(context: context, isAdd: false);
@@ -130,3 +234,66 @@ class _CashScreenState extends State<CashScreen> {
     );
   }
 }
+
+// void showPrintDialog({
+//   required BuildContext context,
+//   required onPressed,
+// }) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return DateDialog(onPressed: onPressed);
+//     },
+//   );
+// }
+
+// ignore: must_be_immutable
+// class DateDialog extends StatelessWidget {
+//   DateDialog({super.key, this.onPressed});
+//   Function? onPressed;
+//   @override
+//   Widget build(BuildContext context) {
+//     GlobalKey<FormState> formKey = GlobalKey<FormState>();
+//     var dateController = TextEditingController();
+//     return AlertDialog(
+//       backgroundColor: AppTheme.white,
+//       title: const Text(
+//         'Invoice Date',
+//         style: TextStyle(
+//           fontWeight: FontWeight.bold,
+//         ),
+//       ),
+//       content: SingleChildScrollView(
+//         scrollDirection: Axis.vertical,
+//         child: Column(
+//           children: [
+//             Form(
+//               key: formKey,
+//               child: Column(
+//                 children: [
+//                   DatePickerFormField(
+//                     controller: dateController,
+//                     text: 'Cash date',
+//                     validator: (value) {
+//                       if (value == null || value.isEmpty) {
+//                         return 'Please enter invoice date';
+//                       }
+//                       return null;
+//                     },
+//                   ),
+//                   const SizedBox(height: 20),
+//                   CustomBtn(
+//                     text: 'Print Invoice',
+//                     onPressed: () {
+//                       onPressed!.call();
+//                     },
+//                   )
+//                 ],
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
