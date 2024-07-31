@@ -23,7 +23,8 @@ class AddUpdateClientTransefer extends StatelessWidget {
     var projectProvider = Provider.of<ProjectProvider>(context);
     var authProvider = Provider.of<AuthManagerProvider>(context);
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    var nameController = TextEditingController();
+    var nameController = TextEditingController(
+        text: !isAdd ? clientTranferProvider.clintes![index].name : '');
     return AlertDialog(
       backgroundColor: AppTheme.white,
       title: const Text(
@@ -112,7 +113,9 @@ class AddUpdateClientTransefer extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CustomBtn(
-                    text: 'Add Client Transfer',
+                    text: isAdd
+                        ? 'Add Client Transfer'
+                        : 'Update Client Transfer',
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         var uuid = const Uuid();
@@ -125,29 +128,32 @@ class AddUpdateClientTransefer extends StatelessWidget {
                                 projectId: projectProvider.currentProject!.id,
                                 userId: authProvider.currentUser!.id,
                                 imageFile: clientTranferProvider.currentImage,
+                                context: context,
                               )
                             : clientTranferProvider.updateClientTransfer(
                                 client: ClientTransefer(
-                                  id: uuid.v4(),
-                                  name: clientTranferProvider.clintes![index].name,
+                                  id: clientTranferProvider.clintes![index].id,
+                                  name: nameController.text,
                                 ),
                                 projectId: projectProvider.currentProject!.id,
                                 userId: authProvider.currentUser!.id,
                                 imageFile: clientTranferProvider.currentImage,
+                                context: context,
                               );
+
                         clientTranferProvider.changeCurrentImage(null);
                         nameController.clear();
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              isAdd
-                                  ? 'Added successfully'
-                                  : 'Updated successfully',
-                            ),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
+                        // Navigator.pop(context);
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text(
+                        //       isAdd
+                        //           ? 'Added successfully'
+                        //           : 'Updated successfully',
+                        //     ),
+                        //     duration: const Duration(seconds: 2),
+                        //   ),
+                        // );
                       }
                     },
                   )

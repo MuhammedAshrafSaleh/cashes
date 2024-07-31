@@ -107,7 +107,10 @@ class DialogUtls {
                 deleteFunction();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Deleted successfully', textDirection: TextDirection.ltr,),
+                    content: Text(
+                      'Deleted successfully',
+                      textDirection: TextDirection.ltr,
+                    ),
                     duration: Duration(seconds: 2),
                   ),
                 );

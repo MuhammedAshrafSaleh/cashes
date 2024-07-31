@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/cash.dart';
+import '../widget/custom_dialog_widget.dart';
 
 class CashProvider extends ChangeNotifier {
   List<Cash> cashes = [];
   File? currentImage;
+
+  
   void changeCurrentImage(newImage) {
     currentImage = newImage;
     notifyListeners();
@@ -45,56 +48,98 @@ class CashProvider extends ChangeNotifier {
     required userId,
     required project,
     File? imageFile,
+    required context,
   }) async {
-    if (imageFile != null) {
-      var uuid = const Uuid();
-      String imageUrl = await FirebaseStorageManager.uploadCashImage(
-        imageFile: imageFile,
-        id: uuid.v4(),
+    try {
+      DialogUtls.showLoading(context: context, message: 'Adding now...');
+      if (imageFile != null) {
+        var uuid = const Uuid();
+        String imageUrl = await FirebaseStorageManager.uploadCashImage(
+          imageFile: imageFile,
+          id: uuid.v4(),
+        );
+        cash.imageURl = imageUrl;
+      }
+      await FirebaseFirestoreManager.addtCashesByUserIdAndProjectId(
+        cash: cash,
+        userId: userId,
+        projectId: project.id,
       );
-      cash.imageURl = imageUrl;
+      getCashes(userId: userId, project: project);
+      DialogUtls.hideLoading(context: context);
+      DialogUtls.showMessage(context: context, message: 'Added Successfully');
+      // Navigator.pop(context);
+      // Navigator.pop(context);
+    } catch (e) {
+      if (context.mounted) {
+        DialogUtls.hideLoading(context: context);
+        DialogUtls.showMessage(context: context, message: e.toString());
+        Navigator.pop(context);
+      }
     }
-    await FirebaseFirestoreManager.addtCashesByUserIdAndProjectId(
-      cash: cash,
-      userId: userId,
-      projectId: project.id,
-    );
-    getCashes(userId: userId, project: project);
   }
 
   void updateCash({
     required Cash cash,
     required project,
     required userId,
+    required context,
     imageFile,
   }) async {
-    if (imageFile != null) {
-      var uuid = const Uuid();
-      String imageUrl = await FirebaseStorageManager.uploadCashImage(
-        imageFile: imageFile,
-        id: uuid.v4(),
+    try {
+      DialogUtls.showLoading(context: context, message: 'Updating now...');
+      if (imageFile != null) {
+        var uuid = const Uuid();
+        String imageUrl = await FirebaseStorageManager.uploadCashImage(
+          imageFile: imageFile,
+          id: uuid.v4(),
+        );
+        cash.imageURl = imageUrl;
+      }
+      await FirebaseFirestoreManager.updateCash(
+        cash: cash,
+        projectId: project.id,
+        userId: userId,
       );
-      cash.imageURl = imageUrl;
+      getCashes(userId: userId, project: project);
+      DialogUtls.hideLoading(context: context);
+      DialogUtls.showMessage(context: context, message: 'Updated Successfully');
+      // Navigator.pop(context);
+      // Navigator.pop(context);
+    } catch (e) {
+      if (context.mounted) {
+        DialogUtls.hideLoading(context: context);
+        DialogUtls.showMessage(context: context, message: e.toString());
+        Navigator.pop(context);
+      }
     }
-    await FirebaseFirestoreManager.updateCash(
-      cash: cash,
-      projectId: project.id,
-      userId: userId,
-    );
-    getCashes(userId: userId, project: project);
   }
 
   void deleteCash({
     required cash,
     required userId,
     required project,
+    required context,
   }) async {
-    await FirebaseFirestoreManager.deleteCashByUserIdAndProjectId(
-      userId: userId,
-      projectId: project.id,
-      cash: cash,
-    );
-    await FirebaseStorageManager.deleteCashImage(cashId: cash.id);
-    getCashes(userId: userId, project: project);
+    try {
+      DialogUtls.showLoading(context: context, message: 'Deleting now...');
+      await FirebaseFirestoreManager.deleteCashByUserIdAndProjectId(
+        userId: userId,
+        projectId: project.id,
+        cash: cash,
+      );
+      await FirebaseStorageManager.deleteCashImage(cashId: cash.id);
+      getCashes(userId: userId, project: project);
+      DialogUtls.hideLoading(context: context);
+      DialogUtls.showMessage(context: context, message: 'Deleted Successfully');
+      // Navigator.pop(context);
+      // Navigator.pop(context);
+    } catch (e) {
+      if (context.mounted) {
+        DialogUtls.hideLoading(context: context);
+        DialogUtls.showMessage(context: context, message: e.toString());
+        Navigator.pop(context);
+      }
+    }
   }
 }

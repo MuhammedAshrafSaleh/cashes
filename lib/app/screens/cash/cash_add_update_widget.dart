@@ -159,6 +159,7 @@ class AddUpdateTask extends StatelessWidget {
                                 project: projectProvider.currentProject,
                                 userId: authProvider.currentUser!.id,
                                 imageFile: cashProvider.currentImage,
+                                context: context,
                               )
                             : cashProvider.addCash(
                                 cash: Cash(
@@ -171,6 +172,7 @@ class AddUpdateTask extends StatelessWidget {
                                 project: projectProvider.currentProject,
                                 userId: authProvider.currentUser!.id,
                                 imageFile: cashProvider.currentImage,
+                                context: context,
                               );
                         cashProvider.changeCurrentImage(null);
                         nameController.clear();

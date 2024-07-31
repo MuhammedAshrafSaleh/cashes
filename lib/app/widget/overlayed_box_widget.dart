@@ -8,6 +8,7 @@ Widget imageCard({
   required BuildContext context,
   bool edit = false,
   onPressed,
+  onPressedDelete,
 }) {
   return AspectRatio(
     aspectRatio: 2.8 / 3,
@@ -58,7 +59,7 @@ Widget imageCard({
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 15.0, bottom: 15),
@@ -66,11 +67,12 @@ Widget imageCard({
                           name,
                           style: const TextStyle(
                             color: AppTheme.white,
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
+                      const Spacer(),
                       edit
                           ? Padding(
                               padding:
@@ -79,6 +81,20 @@ Widget imageCard({
                                 onPressed: onPressed,
                                 icon: const Icon(
                                   Icons.edit,
+                                  size: 30,
+                                  color: AppTheme.white,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                      edit
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15.0, bottom: 15),
+                              child: IconButton(
+                                onPressed: onPressedDelete,
+                                icon: const Icon(
+                                  Icons.delete,
                                   size: 30,
                                   color: AppTheme.white,
                                 ),

@@ -164,6 +164,7 @@ class _CashListWidgetState extends State<CashListWidget> {
                           userId: authProvider.currentUser.id,
                           project: projectProvider.currentProject,
                           cash: cash,
+                          context: context,
                         );
                       });
                 },

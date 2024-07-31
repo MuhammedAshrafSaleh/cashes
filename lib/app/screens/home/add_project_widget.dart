@@ -22,8 +22,6 @@ class AddUpdateProject extends StatelessWidget {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final nameController =
         TextEditingController(text: isAdd ? '' : project!.name);
-    // final moneyController =
-    //     TextEditingController(text: isAdd ? '' : project!.money);
     final typeController =
         TextEditingController(text: isAdd ? '' : project!.type);
     return AlertDialog(
@@ -79,39 +77,40 @@ class AddUpdateProject extends StatelessWidget {
                                 project: Project(
                                   id: uuid.v4(),
                                   name: nameController.text,
-                                  // money: moneyController.text,
+                                  money: '0',
                                   date: formatDate(DateTime.now().toString()),
                                   type: typeController.text,
                                   userId: authProvider.currentUser!.id!,
                                 ),
                                 uId: authProvider.currentUser!.id!,
+                                context: context,
                               )
                             : projectProvider.updateProject(
                                 project: Project(
                                   id: project!.id,
                                   name: nameController.text,
-                                  // money: moneyController.text,
+                                  money: project!.money ?? '0',
                                   date: project!.date,
                                   type: typeController.text,
                                   userId: authProvider.currentUser!.id,
                                 ),
                                 userId: authProvider.currentUser!.id,
+                                context: context,
                               );
-                        print(nameController.text);
-                        // print(moneyController.text);
+
                         nameController.clear();
-                        // moneyController.clear();
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              isAdd
-                                  ? 'Add Successfully!'
-                                  : 'Updated successfully!',
-                            ),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
+                        typeController.clear();
+                        // Navigator.pop(context);
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text(
+                        //       isAdd
+                        //           ? 'Add Successfully!'
+                        //           : 'Updated successfully!',
+                        //     ),
+                        //     duration: const Duration(seconds: 2),
+                        //   ),
+                        // );
                       }
                     },
                   ),

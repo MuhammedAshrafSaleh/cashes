@@ -34,6 +34,7 @@ class ProjectItem extends StatelessWidget {
                       projectProvider.deleteProject(
                         project: project,
                         userId: user.id,
+                        context: context,
                       );
                       print('Deleted From this user ${user.id}');
                     });
