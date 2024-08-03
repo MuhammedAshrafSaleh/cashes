@@ -8,6 +8,7 @@ import '../../core/theme.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_text_btn.dart';
 import '../../widget/custom_textfield.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -52,17 +53,17 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Log In',
-                  style: TextStyle(
+                 Text(
+                 AppLocalizations.of(context)!.login,
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primaryColor,
                   ),
                 ),
-                const Text(
-                  'Zmzm Invoices',
-                  style: TextStyle(
+                 Text(
+                  AppLocalizations.of(context)!.appTitle,
+                  style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.black),
@@ -74,15 +75,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 30),
                       CustomTextFormField(
                         controller: _emailController,
-                        text: 'Email',
+                        text: AppLocalizations.of(context)!.email,
                         keyboardType: TextInputType.emailAddress,
                         hasIcon: false,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your email address';
+                            return  AppLocalizations.of(context)!
+                                .emailValidation;
                           }
                           if (!RegEx.validateEmail(value)) {
-                            return 'Please enter a valid email address';
+                            return AppLocalizations.of(context)!.invalidEmail;
                           }
                           return null;
                         },
@@ -90,18 +92,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 30),
                       CustomTextFormField(
                         controller: _passwordController,
-                        text: 'Password',
+                        text: AppLocalizations.of(context)!.password,
                         hasIcon: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return  AppLocalizations.of(context)!
+                                .passwordValidation;
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 30),
                       CustomBtn(
-                        text: 'Login',
+                        text: AppLocalizations.of(context)!.logIn,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             FirebaseAuthManager.login(
@@ -119,8 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 CustomTextButton(
-                  text1: 'Don’t have an account?',
-                  text2: 'Register Now',
+                  text1: AppLocalizations.of(context)!.dontHaveAccount,
+                  text2: AppLocalizations.of(context)!.register,
                   onPressed: () {
                     Navigator.pushNamed(context, RegisterScreen.routeName);
                   },

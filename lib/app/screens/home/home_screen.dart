@@ -37,9 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
     authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
     return Scaffold(
       body: ProjectListWidget(user: authProvider.currentUser),
-      // selectedIndex == 0
-      //     ? ProjectListWidget(user: authProvider.currentUser)
-      //     : const ClientMoney(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.white,
         onPressed: () {
@@ -47,25 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: const Icon(Icons.add, color: AppTheme.primaryColor),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: selectedIndex,
-      //   onTap: (currentIndex) {
-      //     setState(() {
-      //       selectedIndex = currentIndex;
-      //     });
-      //   },
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Projects',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.money),
-      //       label: 'Clients Transefer',
-      //     ),
-      //   ],
-      // ),
     );
   }
 

@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-
 import 'app/screens/auth/login.dart';
 import 'app/screens/auth/register.dart';
 import 'app/screens/cash/cash_screen.dart';
 import 'app/screens/home/home_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +54,9 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (_) => HomeScreen(),
         CashScreen.routeName: (_) => const CashScreen(),
       },
+      locale:  Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

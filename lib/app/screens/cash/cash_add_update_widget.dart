@@ -13,6 +13,7 @@ import '../../providers/project_provider.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_textfield.dart';
 import '../../widget/date_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddUpdateTask extends StatelessWidget {
   final bool isAdd;
@@ -49,12 +50,12 @@ class AddUpdateTask extends StatelessWidget {
                 children: [
                   CustomTextFormField(
                     controller: nameController,
-                    text: 'Cash Name',
+                    text: AppLocalizations.of(context)!.cashName,
                     keyboardType: TextInputType.text,
                     hasIcon: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter cash name';
+                        return AppLocalizations.of(context)!.enterCashName;
                       }
                       return null;
                     },
@@ -62,12 +63,12 @@ class AddUpdateTask extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomTextFormField(
                     controller: priceController,
-                    text: 'Price',
+                    text: AppLocalizations.of(context)!.cashPrice,
                     keyboardType: TextInputType.number,
                     hasIcon: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the price';
+                        return AppLocalizations.of(context)!.enterCashPrice;
                       }
                       return null;
                     },
@@ -75,10 +76,10 @@ class AddUpdateTask extends StatelessWidget {
                   const SizedBox(height: 20),
                   DatePickerFormField(
                     controller: dateController,
-                    text: 'Cash date',
+                    text: AppLocalizations.of(context)!.cashDate,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your date';
+                        return AppLocalizations.of(context)!.enterCashDate;
                       }
                       return null;
                     },
@@ -91,17 +92,21 @@ class AddUpdateTask extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Select Image Source'),
+                            title:
+                                Text(AppLocalizations.of(context)!.selectImage),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () => Navigator.of(context)
                                     .pop(ImageSource.camera),
-                                child: const Text('Camera'),
+                                child:
+                                    Text(AppLocalizations.of(context)!.camera),
                               ),
                               TextButton(
                                 onPressed: () => Navigator.of(context)
                                     .pop(ImageSource.gallery),
-                                child: const Text('Gallery'),
+                                child: Text(
+                                  AppLocalizations.of(context)!.gallery,
+                                ),
                               ),
                             ],
                           );
@@ -114,32 +119,29 @@ class AddUpdateTask extends StatelessWidget {
                             await picker.pickImage(source: source);
 
                         if (pickedFile != null) {
-                          print('Image Added Successfully');
                           cashProvider
                               .changeCurrentImage(File(pickedFile.path));
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Image Added Successfully'),
+                             SnackBar(
+                              content: Text(AppLocalizations.of(context)!.imageAddedSuccess),
                             ),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('No Image Selected'),
+                             SnackBar(
+                              content: Text(AppLocalizations.of(context)!.noImageSelected),
                             ),
                           );
-                          print('No image selected.');
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('No Image Selected'),
+                           SnackBar(
+                            content: Text(AppLocalizations.of(context)!.noImageSelected),
                           ),
                         );
-                        print('No image selected.');
                       }
                     },
-                    text: 'Upload Image',
+                    text: AppLocalizations.of(context)!.uploadImage,
                   ),
                   const SizedBox(height: 20),
                   CustomBtn(

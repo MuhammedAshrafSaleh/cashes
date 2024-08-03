@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/theme.dart';
 import '../../core/utls.dart';
 import '../../models/project.dart';
@@ -98,9 +98,9 @@ class _CashScreenState extends State<CashScreen> {
                   var dateController = TextEditingController();
                   return AlertDialog(
                     backgroundColor: AppTheme.white,
-                    title: const Text(
-                      'Invoice Date',
-                      style: TextStyle(
+                    title:  Text(
+                      AppLocalizations.of(context)!.cashDate,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -114,46 +114,58 @@ class _CashScreenState extends State<CashScreen> {
                               children: [
                                 DatePickerFormField(
                                   controller: dateController,
-                                  text: 'Cash date',
+                                  text: AppLocalizations.of(context)!.cashDate,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter invoice date';
+                                      return AppLocalizations.of(context)!.enterCashDate;
                                     }
                                     return null;
                                   },
                                 ),
                                 const SizedBox(height: 20),
                                 CustomBtn(
-                                  text: 'Print Invoice',
+                                  text: AppLocalizations.of(context)!.printInvoice,
                                   onPressed: () async {
                                     if (formKey.currentState!.validate()) {
-                                      setState(() {
-                                        isLoading = true;
-                                        print(
-                                            'isLoading===========================================');
-                                      });
-                                      Navigator.pop(context);
-                                      try {
-                                        final pdfFile = await PdfApi.createPdf(
-                                          Invoice(
-                                            projectName: project.name!,
-                                            engineerName:
-                                                authProvider.currentUser!.name!,
-                                            items: cashProvider.cashes,
-                                            date: formatDateWithoutTime(
-                                                dateController.text),
+                                      if (cashProvider.cashes.isEmpty) {
+                                        Navigator.pop(context);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                           SnackBar(
+                                            content: Text(AppLocalizations.of(context)!.noCashes),
+                                            duration: Duration(seconds: 2),
                                           ),
                                         );
-
-                                        await OpenFilex.open(pdfFile.path);
-                                      } catch (e) {
-                                        print('Failed to open PDF: $e');
-                                      } finally {
+                                      } else {
                                         setState(() {
-                                          isLoading = false;
+                                          isLoading = true;
                                           print(
-                                              'loaded===========================================');
+                                              'isLoading===========================================');
                                         });
+                                        Navigator.pop(context);
+                                        try {
+                                          final pdfFile =
+                                              await PdfApi.createPdf(
+                                            Invoice(
+                                              projectName: project.name!,
+                                              engineerName: authProvider
+                                                  .currentUser!.name!,
+                                              items: cashProvider.cashes,
+                                              date: formatDateWithoutTime(
+                                                  dateController.text),
+                                            ),
+                                          );
+
+                                          await OpenFilex.open(pdfFile.path);
+                                        } catch (e) {
+                                          print('Failed to open PDF: $e');
+                                        } finally {
+                                          setState(() {
+                                            isLoading = false;
+                                            print(
+                                                'loaded===========================================');
+                                          });
+                                        }
                                       }
                                     }
                                   },
@@ -211,18 +223,18 @@ class _CashScreenState extends State<CashScreen> {
             selectedIndex = currentIndex;
           });
         },
-        items: const [
+        items:  [
           BottomNavigationBarItem(
-            icon: Icon(Icons.format_align_center),
-            label: 'Invoices',
+            icon: const Icon(Icons.format_align_center),
+            label: AppLocalizations.of(context)!.cashesTab,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.image),
-            label: 'Images',
+            icon: const Icon(Icons.image),
+            label: AppLocalizations.of(context)!.cashesImage,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.money_rounded),
-            label: 'Clients Transfer',
+            icon: const Icon(Icons.money_rounded),
+            label:AppLocalizations.of(context)!.clientTransfer
           ),
         ],
       ),

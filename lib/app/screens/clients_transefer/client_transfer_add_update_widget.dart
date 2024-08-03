@@ -13,6 +13,7 @@ import '../../providers/project_provider.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_textfield.dart';
 
+// ignore: must_be_immutable
 class AddUpdateClientTransefer extends StatelessWidget {
   AddUpdateClientTransefer({super.key, required this.isAdd, this.index});
   bool isAdd;

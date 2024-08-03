@@ -7,7 +7,7 @@ import '../../providers/cash_provider.dart';
 import '../../widget/custom_dialog_widget.dart';
 import '../../widget/empty_screen.dart';
 import 'cash_add_update_widget.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // ignore: must_be_immutable
 class CashListWidget extends StatefulWidget {
   const CashListWidget({super.key});
@@ -26,7 +26,7 @@ class _CashListWidgetState extends State<CashListWidget> {
     cashProvider = Provider.of<CashProvider>(context);
     projectProvider = Provider.of<ProjectProvider>(context);
     return cashProvider.cashes.isEmpty
-        ? EmptyScreen(message: 'No Invoices Yet!')
+        ? EmptyScreen(message: AppLocalizations.of(context)!.noCashes)
         : Directionality(
             textDirection: TextDirection.rtl,
             child: SingleChildScrollView(

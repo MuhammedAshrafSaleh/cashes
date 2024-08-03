@@ -9,6 +9,7 @@ import '../../core/utls.dart';
 import '../../models/project.dart';
 import '../../widget/custom_btn.dart';
 import '../../widget/custom_textfield.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class AddUpdateProject extends StatelessWidget {
@@ -26,9 +27,9 @@ class AddUpdateProject extends StatelessWidget {
         TextEditingController(text: isAdd ? '' : project!.type);
     return AlertDialog(
       backgroundColor: AppTheme.white,
-      title: const Text(
-        'Project Details',
-        style: TextStyle(
+      title:  Text(
+        AppLocalizations.of(context)!.projectDetails,
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -43,12 +44,12 @@ class AddUpdateProject extends StatelessWidget {
                 children: [
                   CustomTextFormField(
                     controller: nameController,
-                    text: 'Please Enter Project Name',
+                    text: AppLocalizations.of(context)!.enterProjectName,
                     keyboardType: TextInputType.text,
                     hasIcon: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter project name';
+                        return AppLocalizations.of(context)!.enterProjectName;
                       }
                       return null;
                     },
@@ -56,19 +57,19 @@ class AddUpdateProject extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomTextFormField(
                     controller: typeController,
-                    text: 'Please Enter the type',
+                    text: AppLocalizations.of(context)!.enterProjectType,
                     keyboardType: TextInputType.text,
                     hasIcon: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the type';
+                        return AppLocalizations.of(context)!.enterProjectType;
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   CustomBtn(
-                    text: isAdd ? 'Add Project' : 'Update Project',
+                    text: isAdd ? AppLocalizations.of(context)!.addProject : AppLocalizations.of(context)!.updateProject,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         var uuid = const Uuid();

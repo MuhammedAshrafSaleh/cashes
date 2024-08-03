@@ -10,6 +10,7 @@ import '../../core/theme.dart';
 import '../../models/app_user.dart';
 import '../../providers/project_provider.dart';
 import 'project_item_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProjectListWidget extends StatelessWidget {
   ProjectListWidget({super.key, required this.user});
@@ -37,7 +38,7 @@ class ProjectListWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome, $name',
+                        '${AppLocalizations.of(context)!.welcome}, $name',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -45,7 +46,7 @@ class ProjectListWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Here\'re your projects, $name',
+                        '${AppLocalizations.of(context)!.yourProjects}, $name',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -70,10 +71,10 @@ class ProjectListWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Expanded(
-                child: projectProvider.projects.isEmpty
-                    ? EmptyScreen(message: 'No Projects Yet!')
-                    : ListView.builder(
+              projectProvider.projects.isEmpty
+                  ? EmptyScreen(message: AppLocalizations.of(context)!.noProjects)
+                  : Expanded(
+                      child: ListView.builder(
                         itemCount: projectProvider.projects.length,
                         itemBuilder: (context, index) {
                           return ProjectItem(
@@ -82,7 +83,40 @@ class ProjectListWidget extends StatelessWidget {
                           );
                         },
                       ),
-              )
+                    )
+              // FutureBuilder(
+              //   future: projectProvider.getProjects(uId: user.id!),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.connectionState == ConnectionState.waiting) {
+              //       return const Center(
+              //           child: CircularProgressIndicator(
+              //         color: AppTheme.primaryColor,
+              //       ));
+              //     } else if (snapshot.hasError) {
+              //       return Center(
+              //         child: Text(
+              //           'Error: ${snapshot.error}',
+              //           style: const TextStyle(
+              //               color: AppTheme.redColor, fontSize: 24.0),
+              //         ),
+              //       );
+              //     } else if (snapshot.hasError) {
+              //       return Expanded(
+              //         child: ListView.builder(
+              //           itemCount: projectProvider.projects.length,
+              //           itemBuilder: (context, index) {
+              //             return ProjectItem(
+              //               project: projectProvider.projects[index],
+              //               user: user,
+              //             );
+              //           },
+              //         ),
+              //       );
+              //     } else {
+              //       return EmptyScreen(message: 'No Projects Yet!');
+              //     }
+              //   },
+              // )
             ],
           ),
         );

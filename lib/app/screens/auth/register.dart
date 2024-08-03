@@ -7,6 +7,7 @@ import '../../widget/custom_btn.dart';
 import '../../widget/custom_text_btn.dart';
 import '../../widget/custom_textfield.dart';
 import 'login.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -32,16 +33,16 @@ class RegisterScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Sign Up',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.register,
+                  style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primaryColor),
                 ),
-                const Text(
-                  'Zmzm Invoices',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.appTitle,
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.black,
@@ -54,11 +55,11 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 30),
                       CustomTextFormField(
                         controller: _nameController,
-                        text: 'Name',
+                        text: AppLocalizations.of(context)!.name,
                         hasIcon: false,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your name';
+                            return AppLocalizations.of(context)!.nameValidation;
                           }
                           return null;
                         },
@@ -66,15 +67,16 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 30),
                       CustomTextFormField(
                         controller: _emailController,
-                        text: 'Email',
+                        text: AppLocalizations.of(context)!.email,
                         keyboardType: TextInputType.emailAddress,
                         hasIcon: false,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your email address';
+                            return AppLocalizations.of(context)!
+                                .emailValidation;
                           }
                           if (!RegEx.validateEmail(value)) {
-                            return 'Please enter a valid email address';
+                            return AppLocalizations.of(context)!.invalidEmail;
                           }
                           return null;
                         },
@@ -82,11 +84,12 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 30),
                       CustomTextFormField(
                         controller: _passwordController,
-                        text: 'Password',
+                        text: AppLocalizations.of(context)!.password,
                         hasIcon: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return AppLocalizations.of(context)!
+                                .passwordValidation;
                           }
                           return null;
                         },
@@ -94,11 +97,12 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 30),
                       CustomTextFormField(
                         controller: _confirmedPasswordController,
-                        text: 'Confirm Password',
+                        text: AppLocalizations.of(context)!.confirmPassword,
                         hasIcon: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your confirm password';
+                            return AppLocalizations.of(context)!
+                                .confirmPasswordValidation;
                           } else if (value != _passwordController.text) {
                             return 'Passwords dose not matched';
                           }
@@ -107,7 +111,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
                       CustomBtn(
-                        text: 'Sign Up',
+                        text: AppLocalizations.of(context)!.register,
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             FirebaseAuthManager.createUser(
@@ -127,8 +131,8 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 CustomTextButton(
-                    text1: 'Don’t have an account?',
-                    text2: 'Log In',
+                    text1: AppLocalizations.of(context)!.alreadyHaveAccount,
+                    text2: AppLocalizations.of(context)!.logIn,
                     onPressed: () {
                       Navigator.pushNamed(context, LoginScreen.routeName);
                     }),
