@@ -8,6 +8,8 @@ class ProjectProvider extends ChangeNotifier {
   List cashes = [];
   List projects = [];
   Project? currentProject;
+
+  
   void changeProject({required Project? project}) {
     currentProject = project;
     notifyListeners();
