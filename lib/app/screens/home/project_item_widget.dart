@@ -1,11 +1,11 @@
 // ignore: must_be_immutable
 import 'package:cashes/app/providers/project_provider.dart';
 import 'package:cashes/app/screens/cash/cash_screen.dart';
-import 'package:cashes/app/widget/custom_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme.dart';
+import '../../widget/custom_dialog_widget.dart';
 import 'add_project_widget.dart';
 
 // ignore: must_be_immutable
@@ -26,19 +26,59 @@ class ProjectItem extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: (context) {
-                DialogUtls.showDeleteConfirmationDialog(
-                    context: context,
-                    deleteFunction: () {
-                      // DialogUtls.showLoading(
-                      //     context: context, message: 'Deleting Now...');
-                      projectProvider.deleteProject(
-                        project: project,
-                        userId: user.id,
-                        context: context,
-                      );
-                      print('Deleted From this user ${user.id}');
-                    });
+                // DialogUtls.showDeleteConfirmationDialog(
+                //     context: context,
+                //     deleteFunction: () {
+                // DialogUtls.showLoading(
+                //     context: context, message: 'Deleting Now...');
+                //       projectProvider.deleteProject(
+                //         project: project,
+                //         userId: user.id,
+                //         context: context,
+                //       );
+                //       print('Deleted From this user ${user.id}');
+                //     });
                 // DialogUtls.hideLoading(context: context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Confirm Deletion'),
+                      content: const Text(
+                          'Are you sure you want to delete this item?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Dismiss the dialog
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Delete'),
+                          onPressed: () {
+                            DialogUtls.showLoading(
+                                context: context, message: 'Deleting now...');
+                            projectProvider.deleteProject(
+                              project: project,
+                              userId: user.id,
+                              context: context,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Deleted successfully',
+                                  textDirection: TextDirection.ltr,
+                                ),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               backgroundColor: AppTheme.redColor,
               foregroundColor: AppTheme.white,

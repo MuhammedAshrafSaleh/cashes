@@ -72,7 +72,8 @@ class ProjectListWidget extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               projectProvider.projects.isEmpty
-                  ? EmptyScreen(message: AppLocalizations.of(context)!.noProjects)
+                  ? EmptyScreen(
+                      message: AppLocalizations.of(context)!.noProjects)
                   : Expanded(
                       child: ListView.builder(
                         itemCount: projectProvider.projects.length,
@@ -83,40 +84,18 @@ class ProjectListWidget extends StatelessWidget {
                           );
                         },
                       ),
+                    ),
+              projectProvider.projects.isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.all(16.0),
+                      color: Colors.grey[200],
+                      child: Text(
+                        'Total: \$${projectProvider.total}',
+                        style: const TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      ),
                     )
-              // FutureBuilder(
-              //   future: projectProvider.getProjects(uId: user.id!),
-              //   builder: (context, snapshot) {
-              //     if (snapshot.connectionState == ConnectionState.waiting) {
-              //       return const Center(
-              //           child: CircularProgressIndicator(
-              //         color: AppTheme.primaryColor,
-              //       ));
-              //     } else if (snapshot.hasError) {
-              //       return Center(
-              //         child: Text(
-              //           'Error: ${snapshot.error}',
-              //           style: const TextStyle(
-              //               color: AppTheme.redColor, fontSize: 24.0),
-              //         ),
-              //       );
-              //     } else if (snapshot.hasError) {
-              //       return Expanded(
-              //         child: ListView.builder(
-              //           itemCount: projectProvider.projects.length,
-              //           itemBuilder: (context, index) {
-              //             return ProjectItem(
-              //               project: projectProvider.projects[index],
-              //               user: user,
-              //             );
-              //           },
-              //         ),
-              //       );
-              //     } else {
-              //       return EmptyScreen(message: 'No Projects Yet!');
-              //     }
-              //   },
-              // )
+                  : const SizedBox(),
             ],
           ),
         );

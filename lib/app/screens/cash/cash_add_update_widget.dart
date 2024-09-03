@@ -115,28 +115,33 @@ class AddUpdateTask extends StatelessWidget {
 
                       if (source != null) {
                         final picker = ImagePicker();
-                        final pickedFile =
-                            await picker.pickImage(source: source);
+                        final pickedFile = await picker.pickImage(
+                          source: source,
+                          imageQuality: 50,
+                        );
 
                         if (pickedFile != null) {
                           cashProvider
                               .changeCurrentImage(File(pickedFile.path));
                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(
-                              content: Text(AppLocalizations.of(context)!.imageAddedSuccess),
+                            SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .imageAddedSuccess),
                             ),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(
-                              content: Text(AppLocalizations.of(context)!.noImageSelected),
+                            SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .noImageSelected),
                             ),
                           );
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(
-                            content: Text(AppLocalizations.of(context)!.noImageSelected),
+                          SnackBar(
+                            content: Text(
+                                AppLocalizations.of(context)!.noImageSelected),
                           ),
                         );
                       }
@@ -149,48 +154,55 @@ class AddUpdateTask extends StatelessWidget {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         var uuid = const Uuid();
-                        isAdd
-                            ? cashProvider.updateCash(
-                                cash: Cash(
-                                  id: cashProvider.cashes[index!].id,
-                                  name: nameController.text,
-                                  cashNumber: '',
-                                  price: priceController.text,
-                                  date: dateController.text,
-                                ),
-                                project: projectProvider.currentProject,
-                                userId: authProvider.currentUser!.id,
-                                imageFile: cashProvider.currentImage,
-                                context: context,
-                              )
-                            : cashProvider.addCash(
-                                cash: Cash(
-                                  id: uuid.v4(),
-                                  name: nameController.text,
-                                  cashNumber: '',
-                                  price: priceController.text,
-                                  date: dateController.text,
-                                ),
-                                project: projectProvider.currentProject,
-                                userId: authProvider.currentUser!.id,
-                                imageFile: cashProvider.currentImage,
-                                context: context,
-                              );
+                        if (isAdd) {
+                          cashProvider.updateCash(
+                              cash: Cash(
+                                id: cashProvider.cashes[index!].id,
+                                name: nameController.text,
+                                cashNumber: '',
+                                price: priceController.text,
+                                date: dateController.text,
+                                imageURl: cashProvider.cashes[index!].imageURl,
+                              ),
+                              project: projectProvider.currentProject,
+                              userId: authProvider.currentUser!.id,
+                              imageFile: cashProvider.currentImage,
+                              context: context,
+                              isImageUpdated: cashProvider.currentImage != null
+                                  ? true
+                                  : false);
+                        } else {
+                          cashProvider.addCash(
+                            cash: Cash(
+                              id: uuid.v4(),
+                              name: nameController.text,
+                              cashNumber: '',
+                              price: priceController.text,
+                              date: dateController.text,
+                            ),
+                            project: projectProvider.currentProject,
+                            userId: authProvider.currentUser!.id,
+                            imageFile: cashProvider.currentImage,
+                            context: context,
+                          );
+                        }
+                        projectProvider.getTotalMoney();
                         cashProvider.changeCurrentImage(null);
                         nameController.clear();
                         priceController.clear();
                         dateController.clear();
-                        Navigator.pop(context);
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
                               isAdd
-                                  ? 'Updated successfully'
-                                  : 'Added successfully',
+                                  ? AppLocalizations.of(context)!.updateProject
+                                  : AppLocalizations.of(context)!.addCash,
                             ),
                             duration: const Duration(seconds: 2),
                           ),
                         );
+                        Navigator.pop(context);
                       }
                     },
                   ),

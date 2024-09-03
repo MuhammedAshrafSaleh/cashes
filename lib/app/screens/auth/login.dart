@@ -23,7 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController _emailController = TextEditingController();
 
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordController =
+      TextEditingController(text: '');
 
   @override
   void initState() {
@@ -53,15 +54,15 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Text(
-                 AppLocalizations.of(context)!.login,
+                Text(
+                  AppLocalizations.of(context)!.login,
                   style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primaryColor,
                   ),
                 ),
-                 Text(
+                Text(
                   AppLocalizations.of(context)!.appTitle,
                   style: const TextStyle(
                       fontSize: 30,
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         hasIcon: false,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return  AppLocalizations.of(context)!
+                            return AppLocalizations.of(context)!
                                 .emailValidation;
                           }
                           if (!RegEx.validateEmail(value)) {
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         hasIcon: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return  AppLocalizations.of(context)!
+                            return AppLocalizations.of(context)!
                                 .passwordValidation;
                           }
                           return null;

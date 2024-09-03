@@ -22,10 +22,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // Schedule the initialization after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final projectProvider =
-          Provider.of<ProjectProvider>(context, listen: false);
-      projectProvider.getProjects(uId: authProvider.currentUser.id);
+      // Access the providers now
+      projectProvider = Provider.of<ProjectProvider>(context, listen: false);
+      authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
+
+      // Ensure authProvider is initialized
+      if (authProvider.currentUser != null) {
+        // projectProvider.getTotalMoney(uId: authProvider.currentUser!.id);
+        projectProvider.getProjects(uId: authProvider.currentUser!.id);
+      }
     });
   }
 

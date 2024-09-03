@@ -53,5 +53,8 @@
   "delete": "Delete",
   "confirmDeletion": "Confirm Deletion",
   "confimQuestion": "Are you sure you want to delete this item?",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+   "lessPassword": "Password should be more than 6 chars",
+   "addingNow": "Adding now...",
+   "updatingNow": "Updating now..."
 }

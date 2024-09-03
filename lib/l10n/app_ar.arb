@@ -53,5 +53,8 @@
   "delete": "حذف",
   "confirmDeletion": "تأكيد الحذف",
   "confimQuestion": "هل أنت متأكد أنك تريد حذف هذا العنصر؟",
-  "cancel": "إلغاء"
+  "cancel": "إلغاء",
+  "lessPassword": "كلمة السر يجب ألا تقل عن 6 أحرف",
+     "addingNow": "Adding now...",
+   "updatingNow": "Updating now..."
 }

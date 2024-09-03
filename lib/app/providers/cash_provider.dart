@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cashes/app/core/firebase%20configurations/firebase_firebase_manager.dart';
 import 'package:cashes/app/core/firebase%20configurations/firebase_storage_manager.dart';
+import 'package:cashes/app/core/utls.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -12,7 +13,6 @@ class CashProvider extends ChangeNotifier {
   List<Cash> cashes = [];
   File? currentImage;
 
-  
   void changeCurrentImage(newImage) {
     currentImage = newImage;
     notifyListeners();
@@ -59,6 +59,10 @@ class CashProvider extends ChangeNotifier {
           id: uuid.v4(),
         );
         cash.imageURl = imageUrl;
+        print(cash.imageURl);
+        print(cash.imageURl);
+        print(getIdfromImage(url: cash.imageURl!));
+        print(getIdfromImage(url: cash.imageURl!));
       }
       await FirebaseFirestoreManager.addtCashesByUserIdAndProjectId(
         cash: cash,
@@ -84,11 +88,15 @@ class CashProvider extends ChangeNotifier {
     required project,
     required userId,
     required context,
-    imageFile,
+    required isImageUpdated,
+    required imageFile,
   }) async {
     try {
-      DialogUtls.showLoading(context: context, message: 'Updating now...');
       if (imageFile != null) {
+        if (isImageUpdated) {
+          await FirebaseStorageManager.deleteCashImage(
+              cashId: getIdfromImage(url: cash.imageURl!));
+        }
         var uuid = const Uuid();
         String imageUrl = await FirebaseStorageManager.uploadCashImage(
           imageFile: imageFile,
@@ -116,7 +124,7 @@ class CashProvider extends ChangeNotifier {
   }
 
   void deleteCash({
-    required cash,
+    required Cash cash,
     required userId,
     required project,
     required context,
@@ -128,7 +136,9 @@ class CashProvider extends ChangeNotifier {
         projectId: project.id,
         cash: cash,
       );
-      await FirebaseStorageManager.deleteCashImage(cashId: cash.id);
+
+      await FirebaseStorageManager.deleteCashImage(
+          cashId: getIdfromImage(url: cash.imageURl!));
       getCashes(userId: userId, project: project);
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(context: context, message: 'Deleted Successfully');

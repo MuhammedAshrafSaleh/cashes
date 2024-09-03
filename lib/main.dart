@@ -3,6 +3,7 @@ import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/cash_provider.dart';
 import 'package:cashes/app/providers/clients_transefer_provider.dart';
 import 'package:cashes/app/providers/project_provider.dart';
+import 'package:cashes/app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
@@ -47,14 +48,15 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightMode,
-      initialRoute: RegisterScreen.routeName,
+      initialRoute: SplashScreen.routeName,
       routes: {
         RegisterScreen.routeName: (_) => RegisterScreen(),
         LoginScreen.routeName: (_) => LoginScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
         CashScreen.routeName: (_) => const CashScreen(),
+        SplashScreen.routeName: (_) => const SplashScreen(),
       },
-      locale:  Locale('ar'),
+      locale: Locale('ar'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );

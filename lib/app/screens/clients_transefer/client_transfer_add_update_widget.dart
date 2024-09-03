@@ -81,8 +81,10 @@ class AddUpdateClientTransefer extends StatelessWidget {
 
                       if (source != null) {
                         final picker = ImagePicker();
-                        final pickedFile =
-                            await picker.pickImage(source: source);
+                        final pickedFile = await picker.pickImage(
+                          source: source,
+                          imageQuality: 50,
+                        );
 
                         if (pickedFile != null) {
                           print('Image Added Successfully');
@@ -140,6 +142,10 @@ class AddUpdateClientTransefer extends StatelessWidget {
                                 userId: authProvider.currentUser!.id,
                                 imageFile: clientTranferProvider.currentImage,
                                 context: context,
+                                isImageUpdated:
+                                    clientTranferProvider.currentImage != null
+                                        ? true
+                                        : false,
                               );
 
                         clientTranferProvider.changeCurrentImage(null);

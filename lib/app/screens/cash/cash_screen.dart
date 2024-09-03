@@ -98,7 +98,7 @@ class _CashScreenState extends State<CashScreen> {
                   var dateController = TextEditingController();
                   return AlertDialog(
                     backgroundColor: AppTheme.white,
-                    title:  Text(
+                    title: Text(
                       AppLocalizations.of(context)!.cashDate,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -117,22 +117,26 @@ class _CashScreenState extends State<CashScreen> {
                                   text: AppLocalizations.of(context)!.cashDate,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return AppLocalizations.of(context)!.enterCashDate;
+                                      return AppLocalizations.of(context)!
+                                          .enterCashDate;
                                     }
                                     return null;
                                   },
                                 ),
                                 const SizedBox(height: 20),
                                 CustomBtn(
-                                  text: AppLocalizations.of(context)!.printInvoice,
+                                  text: AppLocalizations.of(context)!
+                                      .printInvoice,
                                   onPressed: () async {
                                     if (formKey.currentState!.validate()) {
                                       if (cashProvider.cashes.isEmpty) {
                                         Navigator.pop(context);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                           SnackBar(
-                                            content: Text(AppLocalizations.of(context)!.noCashes),
+                                          SnackBar(
+                                            content: Text(
+                                                AppLocalizations.of(context)!
+                                                    .noCashes),
                                             duration: Duration(seconds: 2),
                                           ),
                                         );
@@ -186,7 +190,6 @@ class _CashScreenState extends State<CashScreen> {
       ),
       body:
           // screens[selectedIndex],
-
           Stack(
         children: [
           screens[selectedIndex],
@@ -223,7 +226,7 @@ class _CashScreenState extends State<CashScreen> {
             selectedIndex = currentIndex;
           });
         },
-        items:  [
+        items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.format_align_center),
             label: AppLocalizations.of(context)!.cashesTab,
@@ -232,10 +235,10 @@ class _CashScreenState extends State<CashScreen> {
             icon: const Icon(Icons.image),
             label: AppLocalizations.of(context)!.cashesImage,
           ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.money_rounded),
-            label:AppLocalizations.of(context)!.clientTransfer
-          ),
+          // BottomNavigationBarItem(
+          //   icon: const Icon(Icons.money_rounded),
+          //   label:AppLocalizations.of(context)!.clientTransfer
+          // ),
         ],
       ),
     );
@@ -244,7 +247,7 @@ class _CashScreenState extends State<CashScreen> {
   List<Widget> screens = const [
     CashListWidget(),
     CashImagesWidget(),
-    ClientMoney(),
+    // ClientMoney(),
   ];
 
   void showInvoiceDialog({

@@ -91,6 +91,9 @@ class RegisterScreen extends StatelessWidget {
                             return AppLocalizations.of(context)!
                                 .passwordValidation;
                           }
+                          if (value.length < 6) {
+                            return AppLocalizations.of(context)!.lessPassword;
+                          }
                           return null;
                         },
                       ),

@@ -82,6 +82,11 @@ class FirebaseAuthManager {
             context: context,
             message: 'Wrong password provided for that user.');
         print('Wrong password provided for that user.');
+      } else if (e.code == 'invalid-credential') {
+        DialogUtls.showMessage(
+            context: context, message: 'Invalid credentials provided.');
+        DialogUtls.hideLoading(context: context);
+        print('Invalid credentials provided.');
       } else {
         DialogUtls.hideLoading(context: context);
         DialogUtls.showMessage(context: context, message: e.toString());
@@ -94,17 +99,22 @@ class FirebaseAuthManager {
       {required context, required AuthManagerProvider authProvider}) {
     FirebaseAuth.instance.userChanges().listen((User? user) async {
       if (user == null) {
-        print('User is currently signed out!');
+        Navigator.pushReplacementNamed(
+          context,
+          LoginScreen.routeName,
+        );
       } else {
         var myCurrentUser =
             await FirebaseFirestoreManager.getUser(userId: user.uid);
         authProvider.updateUser(myCurrentUser);
         if (context.mounted) {
-          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+          Navigator.pushReplacementNamed(
+            context,
+            HomeScreen.routeName,
+          );
         } else {
           print('Context is no longer valid');
         }
-        print('User is signed in!');
       }
     });
   }

@@ -8,6 +8,7 @@ import '../../widget/custom_dialog_widget.dart';
 import '../../widget/empty_screen.dart';
 import 'cash_add_update_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // ignore: must_be_immutable
 class CashListWidget extends StatefulWidget {
   const CashListWidget({super.key});
@@ -160,6 +161,7 @@ class _CashListWidgetState extends State<CashListWidget> {
                   DialogUtls.showDeleteConfirmationDialog(
                       context: context,
                       deleteFunction: () {
+                        projectProvider.getTotalMoney();
                         cashProvider.deleteCash(
                           userId: authProvider.currentUser.id,
                           project: projectProvider.currentProject,

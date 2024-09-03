@@ -14,7 +14,7 @@ class ClientTransefer {
       : this(
           id: data['id'] as String,
           name: data['name'] as String,
-          imageURL: data['imageURL'] as String,
+          imageURL: data['imageURL'] as String?,
         );
   Map<String, dynamic> toFirestore() {
     return {

@@ -1,6 +1,9 @@
 import 'package:cashes/app/core/firebase%20configurations/firebase_firebase_manager.dart';
+import 'package:cashes/app/core/utls.dart';
+import 'package:cashes/app/models/cash.dart';
 import 'package:flutter/material.dart';
 
+import '../core/firebase configurations/firebase_storage_manager.dart';
 import '../models/project.dart';
 import '../widget/custom_dialog_widget.dart';
 
@@ -8,8 +11,7 @@ class ProjectProvider extends ChangeNotifier {
   List cashes = [];
   List projects = [];
   Project? currentProject;
-
-  
+  int total = 0;
   void changeProject({required Project? project}) {
     currentProject = project;
     notifyListeners();
@@ -25,6 +27,22 @@ class ProjectProvider extends ChangeNotifier {
   }) async {
     projects =
         await FirebaseFirestoreManager.getAllProjectByUserId(userId: uId);
+    total = 0;
+    for (Project project in projects) {
+      print("Print : ${project.name} ");
+      print("Price : ${project.money} ");
+      total += int.parse(project.money!);
+    }
+    notifyListeners();
+  }
+
+  getTotalMoney() {
+    total = 0;
+    for (Project project in projects) {
+      print("Print : ${project.name} ");
+      print("Price : ${project.money} ");
+      total += int.parse(project.money!);
+    }
     notifyListeners();
   }
 
@@ -83,12 +101,20 @@ class ProjectProvider extends ChangeNotifier {
     required String userId,
     required BuildContext context,
   }) async {
+    List<Cash> cashes = await FirebaseFirestoreManager.getAllCashes(
+      userId: userId,
+      projectId: project.id,
+    );
+    for (var cash in cashes) {
+      await FirebaseStorageManager.deleteCashImage(
+          cashId: getIdfromImage(url: cash.imageURl!));
+    }
     await FirebaseFirestoreManager.removeProjectById(
       userId: userId,
       projectId: project.id!,
     );
-    print('Deleteeeeeeeeeeeeeeeeeeeeeed');
     getProjects(uId: userId);
+    DialogUtls.hideLoading(context: context);
     // try {
     //   DialogUtls.showLoading(context: context, message: 'Deleting now...');
     //   await FirebaseFirestoreManager.removeProjectById(

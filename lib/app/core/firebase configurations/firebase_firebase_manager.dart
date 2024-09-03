@@ -172,7 +172,7 @@ class FirebaseFirestoreManager {
     required projectId,
     required ClientTransefer client,
   }) async {
-    return getCashesCollections(userId: userId, projectId: projectId)
+    return getClientsTranferCollection(userId: userId, projectId: projectId)
         .doc(client.id)
         .update(client.toFirestore());
   }
