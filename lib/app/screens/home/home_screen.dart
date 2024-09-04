@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../core/theme.dart';
-import '../../providers/auth_manager_provider.dart';
-import '../../providers/project_provider.dart';
 import 'add_project_widget.dart';
 import 'project_list_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/project_provider.dart';
+import '../../providers/auth_manager_provider.dart';
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
   static const String routeName = 'Home-Screen';
 
   @override
@@ -43,7 +45,12 @@ class _HomeScreenState extends State<HomeScreen> {
     projectProvider = Provider.of<ProjectProvider>(context);
     authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
     return Scaffold(
-      body: ProjectListWidget(user: authProvider.currentUser),
+      body: RefreshIndicator(
+        onRefresh: ()async {
+          await Future.delayed(const Duration(milliseconds: 500));
+           projectProvider.getTotalMoney();
+        },
+        child: ProjectListWidget(user: authProvider.currentUser)),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.white,
         onPressed: () {
