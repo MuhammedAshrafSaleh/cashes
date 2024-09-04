@@ -1,9 +1,6 @@
 import 'package:cashes/app/core/theme.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
-import 'package:cashes/app/screens/auth/login.dart';
-import 'package:cashes/app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import '../core/firebase configurations/firebase_auth_manager.dart';

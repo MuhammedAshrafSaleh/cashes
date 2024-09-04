@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../core/firebase configurations/firebase_storage_manager.dart';
 import '../models/project.dart';
 import '../widget/custom_dialog_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProjectProvider extends ChangeNotifier {
   List cashes = [];
@@ -52,14 +53,17 @@ class ProjectProvider extends ChangeNotifier {
     required BuildContext context,
   }) async {
     try {
-      DialogUtls.showLoading(context: context, message: 'Adding now...');
+      DialogUtls.showLoading(
+          context: context, message: AppLocalizations.of(context)!.addingNow);
       await FirebaseFirestoreManager.addProjects(
         project: project,
         userId: uId,
       );
       getProjects(uId: uId);
       DialogUtls.hideLoading(context: context);
-      DialogUtls.showMessage(context: context, message: 'Added Successfully');
+      DialogUtls.showMessage(
+          context: context,
+          message: AppLocalizations.of(context)!.addSucceccfuly);
       Navigator.pop(context);
       Navigator.pop(context);
     } catch (e) {
@@ -77,14 +81,17 @@ class ProjectProvider extends ChangeNotifier {
     required BuildContext context,
   }) async {
     try {
-      DialogUtls.showLoading(context: context, message: 'Updating now...');
+      DialogUtls.showLoading(
+          context: context, message: AppLocalizations.of(context)!.updatingNow);
       await FirebaseFirestoreManager.updateProject(
         project: project,
         userId: userId,
       );
       getProjects(uId: userId);
       DialogUtls.hideLoading(context: context);
-      DialogUtls.showMessage(context: context, message: 'Added Successfully');
+      DialogUtls.showMessage(
+          context: context,
+          message: AppLocalizations.of(context)!.addSucceccfuly);
       Navigator.pop(context);
       Navigator.pop(context);
     } catch (e) {

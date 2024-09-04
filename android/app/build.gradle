@@ -43,7 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.cashes"
+        applicationId = 'com.example.cashes'
         minSdk = 23
         targetSdkVersion 33
         versionCode = flutterVersionCode.toInteger()
@@ -67,7 +67,7 @@ flutter {
 
 dependencies {
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(platform('com.google.firebase:firebase-bom:33.1.2'))
+    implementation('com.google.firebase:firebase-analytics')
     implementation ("com.android.support:multidex:2.0.1")
 }

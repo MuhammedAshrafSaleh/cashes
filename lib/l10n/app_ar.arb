@@ -55,6 +55,19 @@
   "confimQuestion": "هل أنت متأكد أنك تريد حذف هذا العنصر؟",
   "cancel": "إلغاء",
   "lessPassword": "كلمة السر يجب ألا تقل عن 6 أحرف",
-     "addingNow": "Adding now...",
-   "updatingNow": "Updating now..."
+  "addingNow": "تتم الإضافة الان...",
+  "updatingNow": "يتم التعديل الان...",
+  "addSucceccfuly": "تم الاضافة بنجاح",
+  "registeredSuccessfully": "تم التسجيل بنجاح",
+  "loading": "تحميل...",
+  "successfullyLogedIn": "تم تسجيل الدخول بنجاح",
+  "updatedSuccessfully": "تم التعديل بنجاح",
+  "deletedSuccessfully": "تم المسح بنجاح",
+  "deletingNow": "يتم المسح الان...",
+  "invalidcredentials": "تم تقديم بيانات اعتماد غير صحيحة.",
+  "wrongPasswordProvided": "تم تقديم كلمة مرور خاطئة لهذا المستخدم.",
+  "noUserFound": "لم يتم العثور على مستخدم لهذا البريد الإلكتروني.",
+  "accountAlready": "الحساب موجود بالفعل لهذا البريد الإلكتروني.",
+  "passwordProvidedWeak": "كلمة المرور المقدمة ضعيفة جدًا.",
+  "updateCash": "تعديل"
 }

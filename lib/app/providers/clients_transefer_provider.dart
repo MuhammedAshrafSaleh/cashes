@@ -5,7 +5,7 @@ import 'package:cashes/app/core/firebase%20configurations/firebase_storage_manag
 import 'package:cashes/app/models/client_transefer.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../core/utls.dart';
 import '../widget/custom_dialog_widget.dart';
 
@@ -41,7 +41,8 @@ class ClientsTranseferProvider extends ChangeNotifier {
     required context,
   }) async {
     try {
-      DialogUtls.showLoading(context: context, message: 'Adding now...');
+      DialogUtls.showLoading(
+          context: context, message: AppLocalizations.of(context)!.addingNow);
       if (imageFile != null) {
         String imageURL = await FirebaseStorageManager.uploadClinetImage(
           imageFile: imageFile,
@@ -56,7 +57,9 @@ class ClientsTranseferProvider extends ChangeNotifier {
       );
       getAllClientTransfers(projectId: projectId, userId: userId);
       DialogUtls.hideLoading(context: context);
-      DialogUtls.showMessage(context: context, message: 'Added Successfully');
+      DialogUtls.showMessage(
+          context: context,
+          message: AppLocalizations.of(context)!.addSucceccfuly);
       Navigator.pop(context);
       Navigator.pop(context);
     } catch (e) {
@@ -77,7 +80,8 @@ class ClientsTranseferProvider extends ChangeNotifier {
     required isImageUpdated,
   }) async {
     try {
-      DialogUtls.showLoading(context: context, message: 'Updating now...');
+      DialogUtls.showLoading(
+          context: context, message: AppLocalizations.of(context)!.updatingNow);
       if (imageFile != null) {
         // if (isImageUpdated) {
         //   await FirebaseStorageManager.deleteClientImage(
@@ -97,7 +101,9 @@ class ClientsTranseferProvider extends ChangeNotifier {
       );
       getAllClientTransfers(projectId: projectId, userId: userId);
       DialogUtls.hideLoading(context: context);
-      DialogUtls.showMessage(context: context, message: 'Updated Successfully');
+      DialogUtls.showMessage(
+          context: context,
+          message: AppLocalizations.of(context)!.updatedSuccessfully);
       // Navigator.pop(context);
       // Navigator.pop(context);
     } catch (e) {
@@ -116,7 +122,8 @@ class ClientsTranseferProvider extends ChangeNotifier {
     required context,
   }) async {
     try {
-      DialogUtls.showLoading(context: context, message: 'Deleting now...');
+      DialogUtls.showLoading(
+          context: context, message: AppLocalizations.of(context)!.deletingNow);
       await FirebaseStorageManager.deleteClientImage(
           clientId: getIdFromClientId(url: client.imageURL!));
       await FirebaseFirestoreManager.deleteClientTransfer(
@@ -126,7 +133,9 @@ class ClientsTranseferProvider extends ChangeNotifier {
       );
       getAllClientTransfers(projectId: projectId, userId: userId);
       DialogUtls.hideLoading(context: context);
-      DialogUtls.showMessage(context: context, message: 'Deleted Successfully');
+      DialogUtls.showMessage(
+          context: context,
+          message: AppLocalizations.of(context)!.deletedSuccessfully);
       Navigator.pop(context);
       // Navigator.pop(context);
     } catch (e) {

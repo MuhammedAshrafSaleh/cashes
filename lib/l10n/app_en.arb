@@ -56,5 +56,18 @@
   "cancel": "Cancel",
    "lessPassword": "Password should be more than 6 chars",
    "addingNow": "Adding now...",
-   "updatingNow": "Updating now..."
+   "updatingNow": "Updating now...",
+   "addSucceccfuly" : "Added Successfully",
+   "registeredSuccessfully" : "Registered Successfully",
+   "loading": "Loading...",
+   "successfullyLogedIn" : "Successfully Loged In",
+   "updatedSuccessfully" : "Updated Successfully",
+   "deletedSuccessfully" : "Deleted Successfully",
+   "deletingNow" : "Deleting now...",
+   "invalidcredentials": "Invalid credentials provided.",
+   "wrongPasswordProvided": "Wrong password provided for that user.",
+   "noUserFound": "No user found for that email.",
+   "accountAlready": "The account already exists for that email.",
+   "passwordProvidedWeak": "The password provided is too weak.",
+     "updateCash": "Update Cash"
 }

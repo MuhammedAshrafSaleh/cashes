@@ -33,9 +33,10 @@ class AddUpdateTask extends StatelessWidget {
         text: isAdd ? cashProvider.cashes[index!].date : '');
     return AlertDialog(
       backgroundColor: AppTheme.white,
-      title: const Text(
-        'Cash Details',
-        style: TextStyle(
+      title: Text(
+        // TODO: Change
+        AppLocalizations.of(context)!.cashDetails,
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -150,7 +151,9 @@ class AddUpdateTask extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CustomBtn(
-                    text: isAdd ? 'Update Cash' : 'Add Cash',
+                    text: isAdd
+                        ? AppLocalizations.of(context)!.updateCash
+                        : AppLocalizations.of(context)!.addCash,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         var uuid = const Uuid();

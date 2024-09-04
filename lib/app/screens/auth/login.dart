@@ -29,8 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: What is SchedulerBinding ?
-    // TODO: Login Screen Is Shown and then going to the Home Screen
     SchedulerBinding.instance.addPostFrameCallback((_) {
       // AuthManagerProvider authProvider =
       //     Provider.of<AuthManagerProvider>(context, listen: false);

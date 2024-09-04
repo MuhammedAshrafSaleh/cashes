@@ -4,7 +4,7 @@ import 'package:cashes/app/screens/auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/app_user.dart';
 import '../../screens/home/home_screen.dart';
 import '../../widget/custom_dialog_widget.dart';
@@ -16,7 +16,8 @@ class FirebaseAuthManager {
       required name,
       required context}) async {
     try {
-      DialogUtls.showLoading(context: context, message: 'Loading...');
+      DialogUtls.showLoading(
+          context: context, message: AppLocalizations.of(context)!.loading);
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -28,7 +29,8 @@ class FirebaseAuthManager {
       await FirebaseAuth.instance.signOut();
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
-          context: context, message: 'Registered Successfully');
+          context: context,
+          message: AppLocalizations.of(context)!.registeredSuccessfully);
       await FirebaseAuth.instance.signOut();
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, LoginScreen.routeName);
@@ -36,13 +38,14 @@ class FirebaseAuthManager {
       if (e.code == 'weak-password') {
         DialogUtls.hideLoading(context: context);
         DialogUtls.showMessage(
-            context: context, message: 'The password provided is too weak.');
+            context: context,
+            message: AppLocalizations.of(context)!.passwordProvidedWeak);
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         DialogUtls.hideLoading(context: context);
         DialogUtls.showMessage(
             context: context,
-            message: 'The account already exists for that email.');
+            message: AppLocalizations.of(context)!.accountAlready);
         print('The account already exists for that email.');
       }
     } catch (e) {
@@ -53,7 +56,8 @@ class FirebaseAuthManager {
 
   static Future<void> login(
       {required email, required password, required context}) async {
-    DialogUtls.showLoading(context: context, message: 'Loading...');
+    DialogUtls.showLoading(
+        context: context, message: AppLocalizations.of(context)!.loading);
     try {
       var authProvider = Provider.of<AuthManagerProvider>(context,
           listen:
@@ -63,7 +67,8 @@ class FirebaseAuthManager {
       // print(credential.user!.uid);
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
-          context: context, message: 'Successfully Loged In');
+          context: context,
+          message: AppLocalizations.of(context)!.successfullyLogedIn);
       var myCurrentUser =
           await FirebaseFirestoreManager.getUser(userId: credential.user!.uid);
       if (myCurrentUser != null) {
@@ -74,25 +79,64 @@ class FirebaseAuthManager {
       if (e.code == 'user-not-found') {
         DialogUtls.hideLoading(context: context);
         DialogUtls.showMessage(
-            context: context, message: 'No user found for that email.');
+            context: context,
+            message: AppLocalizations.of(context)!.noUserFound);
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         DialogUtls.hideLoading(context: context);
         DialogUtls.showMessage(
             context: context,
-            message: 'Wrong password provided for that user.');
+            message: AppLocalizations.of(context)!.wrongPasswordProvided);
         print('Wrong password provided for that user.');
-      } else if (e.code == 'invalid-credential') {
-        DialogUtls.showMessage(
-            context: context, message: 'Invalid credentials provided.');
-        DialogUtls.hideLoading(context: context);
-        print('Invalid credentials provided.');
       } else {
         DialogUtls.hideLoading(context: context);
         DialogUtls.showMessage(context: context, message: e.toString());
       }
     }
   }
+
+  // static Future<void> login(
+  //     {required email, required password, required context}) async {
+  //   DialogUtls.showLoading(context: context, message: 'Loading...');
+  //   try {
+  //     var authProvider = Provider.of<AuthManagerProvider>(context,
+  //         listen:
+  //             false); // when you call the provider outside the build add listen:false
+  //     final credential = await FirebaseAuth.instance
+  //         .signInWithEmailAndPassword(email: email, password: password);
+  //     // print(credential.user!.uid);
+  //     DialogUtls.hideLoading(context: context);
+  //     DialogUtls.showMessage(
+  //         context: context, message: 'Successfully Loged In');
+  //     var myCurrentUser =
+  //         await FirebaseFirestoreManager.getUser(userId: credential.user!.uid);
+  //     if (myCurrentUser != null) {
+  //       authProvider.updateUser(myCurrentUser);
+  //       Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'user-not-found') {
+  //       DialogUtls.hideLoading(context: context);
+  //       DialogUtls.showMessage(
+  //           context: context, message: 'No user found for that email.');
+  //       print('No user found for that email.');
+  //     } else if (e.code == 'wrong-password') {
+  //       DialogUtls.hideLoading(context: context);
+  //       DialogUtls.showMessage(
+  //           context: context,
+  //           message: 'Wrong password provided for that user.');
+  //       print('Wrong password provided for that user.');
+  //     } else if (e.code == 'invalid-credential') {
+  //       DialogUtls.showMessage(
+  //           context: context, message: 'Invalid credentials provided.');
+  //       DialogUtls.hideLoading(context: context);
+  //       print('Invalid credentials provided.');
+  //     } else {
+  //       DialogUtls.hideLoading(context: context);
+  //       DialogUtls.showMessage(context: context, message: e.toString());
+  //     }
+  //   }
+  // }
 
   // TODO: How?
   static void checkUserState(
