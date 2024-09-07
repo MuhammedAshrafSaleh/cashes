@@ -90,7 +90,7 @@ class ProjectListWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       color: Colors.grey[200],
                       child: Text(
-                        '${AppLocalizations.of(context)!.total} : ${projectProvider.total}',
+                        '${AppLocalizations.of(context)!.total}: ${projectProvider.total}',
                         style: const TextStyle(
                             fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),

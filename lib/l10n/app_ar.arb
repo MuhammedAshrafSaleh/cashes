@@ -43,7 +43,7 @@
   "invoiceDetails": "تفاصيل الفاتورة",
   "clientName": "اسم دفعة العميل",
   "addClient": "إضافة دفعة عميل",
-  "printInvoice": "طباعة الفاتورة",
+  "printInvoice": "طباعة العهدة",
   "selectImage": "حدد مصدر الصورة؟",
   "camera": "الكاميرا",
   "gallery": "المعرض",
@@ -75,5 +75,6 @@
   "noInternet": "لا يوجد اتصال بالإنترنت",
   "deleteProject": "حذف المشروع",
   "editProject": "تعديل المشروع",
-  "total": "الإجمالى"
+  "total": "الإجمالى",
+  "invoiceData": "تاريخ العهدة"
 }

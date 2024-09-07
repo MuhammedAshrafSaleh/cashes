@@ -11,7 +11,9 @@ import 'package:http/http.dart' as http;
 
 class PdfApi {
   static createPdf(Invoice invoice) async {
-    var logo = (await rootBundle.load("assets/images/zmzm_logo.png"))
+    var logo = (await rootBundle.load(invoice.isZmzm
+            ? "assets/images/zmzm_logo.png"
+            : "assets/images/ds_logo.png"))
         .buffer
         .asUint8List();
     final doc = pw.Document();
@@ -174,7 +176,6 @@ class PdfApi {
       'التوجيه',
       'المبلغ',
       'البيان',
-      'رقم الإيصال',
       'التاريخ',
       'م',
     ];
@@ -184,19 +185,16 @@ class PdfApi {
       final priceString = item.price;
       return [
         '',
-        '\$ $priceString',
+        '$priceString',
         item.name,
-        item.cashNumber,
+        // item.cashNumber,
         item.date,
         '${index + 1}',
       ];
     }).toList();
     if (data.length < 25) {
       for (int i = data.length; i < 25; i++) {
-        // int index = i + 1;
-        // String number = index.toString();
         data.add([
-          '',
           '',
           '',
           '',
@@ -210,8 +208,7 @@ class PdfApi {
     final columnWidths = [
       const pw.FixedColumnWidth(90), // Auto width for the first column
       const pw.FixedColumnWidth(60), // Fixed width for the second column
-      const pw.FixedColumnWidth(150), // Fixed width for the third column
-      const pw.FixedColumnWidth(65), // Fixed width for the fourth column
+      const pw.FixedColumnWidth(210), // Fixed width for the third column
       const pw.FixedColumnWidth(75), // Fixed width for the fifth column
       const pw.FixedColumnWidth(30), // Fixed width for the sixth column
     ];

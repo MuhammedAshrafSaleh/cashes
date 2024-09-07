@@ -23,7 +23,7 @@ class CashProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getCashes({
+  Future<void> getCashes({
     required String userId,
     required project,
   }) async {
@@ -60,21 +60,19 @@ class CashProvider extends ChangeNotifier {
           id: uuid.v4(),
         );
         cash.imageURl = imageUrl;
-        print(cash.imageURl);
-        print(cash.imageURl);
-        print(getIdfromImage(url: cash.imageURl!));
-        print(getIdfromImage(url: cash.imageURl!));
       }
       await FirebaseFirestoreManager.addtCashesByUserIdAndProjectId(
         cash: cash,
         userId: userId,
         projectId: project.id,
       );
-      getCashes(userId: userId, project: project);
+      await getCashes(userId: userId, project: project);
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
           context: context,
           message: AppLocalizations.of(context)!.addSucceccfuly);
+      Navigator.pop(context);
+      Navigator.pop(context);
       // Navigator.pop(context);
       // Navigator.pop(context);
     } catch (e) {
@@ -112,13 +110,12 @@ class CashProvider extends ChangeNotifier {
         projectId: project.id,
         userId: userId,
       );
-      getCashes(userId: userId, project: project);
+      await getCashes(userId: userId, project: project);
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
           context: context,
           message: AppLocalizations.of(context)!.updatedSuccessfully);
-      // Navigator.pop(context);
-      // Navigator.pop(context);
+      Navigator.pop(context);
     } catch (e) {
       if (context.mounted) {
         DialogUtls.hideLoading(context: context);
@@ -137,6 +134,7 @@ class CashProvider extends ChangeNotifier {
     try {
       DialogUtls.showLoading(
           context: context, message: AppLocalizations.of(context)!.deletingNow);
+
       await FirebaseFirestoreManager.deleteCashByUserIdAndProjectId(
         userId: userId,
         projectId: project.id,
@@ -144,14 +142,16 @@ class CashProvider extends ChangeNotifier {
       );
 
       await FirebaseStorageManager.deleteCashImage(
-          cashId: getIdfromImage(url: cash.imageURl!));
-      getCashes(userId: userId, project: project);
+        cashId: getIdfromImage(url: cash.imageURl!),
+      );
+
+      await getCashes(userId: userId, project: project);
+
       DialogUtls.hideLoading(context: context);
       DialogUtls.showMessage(
-          context: context,
-          message: AppLocalizations.of(context)!.deletedSuccessfully);
-      // Navigator.pop(context);
-      // Navigator.pop(context);
+        context: context,
+        message: AppLocalizations.of(context)!.deletedSuccessfully,
+      );
     } catch (e) {
       if (context.mounted) {
         DialogUtls.hideLoading(context: context);

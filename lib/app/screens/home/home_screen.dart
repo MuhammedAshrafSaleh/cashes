@@ -64,14 +64,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return Scaffold(
       body: RefreshIndicator(
-        color: AppTheme.primaryColor,
-        backgroundColor: AppTheme.white,
-        onRefresh: () async {
-          await Future.delayed(const Duration(milliseconds: 500));
-          projectProvider.getTotalMoney();
-        },
-        child: ProjectListWidget(user: authProvider.currentUser),
-      ),
+          color: AppTheme.primaryColor,
+          backgroundColor: AppTheme.white,
+          onRefresh: () async {
+            await Future.delayed(const Duration(milliseconds: 500));
+            projectProvider.getTotalMoney();
+          },
+          child: ProjectListWidget(user: authProvider.currentUser)),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.white,
         onPressed: () {

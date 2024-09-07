@@ -75,5 +75,6 @@
   "noInternet": "No Internet Connection",
   "deleteProject": "Delete Project",
   "editProject": "Edit Project",
-  "total" : "total"
+  "total": "total",
+  "invoiceData": "Invoice Data"
 }

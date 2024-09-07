@@ -14,7 +14,7 @@ String formateTime(DateTime dateTime) {
 
 String formatDateWithoutTime(String date) {
   final DateTime dateTime = DateTime.parse(date);
-  final DateFormat formatter = DateFormat('yMMMd');
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
   return formatter.format(dateTime);
 }
 

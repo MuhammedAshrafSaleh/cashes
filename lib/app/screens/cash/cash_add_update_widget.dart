@@ -224,7 +224,6 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                             duration: const Duration(seconds: 2),
                           ),
                         );
-                        Navigator.pop(context);
                       }
                     },
                   ),

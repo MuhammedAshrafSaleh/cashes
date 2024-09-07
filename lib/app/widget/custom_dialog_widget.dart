@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DialogUtls {
   static void showLoading(
@@ -92,26 +93,26 @@ class DialogUtls {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Deletion'),
-          content: const Text('Are you sure you want to delete this item?'),
+          title: Text(AppLocalizations.of(context)!.confirmDeletion),
+          content: Text(AppLocalizations.of(context)!.confimQuestionDeletion),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               onPressed: () {
                 Navigator.of(context).pop(); // Dismiss the dialog
               },
             ),
             TextButton(
-              child: const Text('Delete'),
+              child: Text(AppLocalizations.of(context)!.delete),
               onPressed: () {
                 deleteFunction();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text(
-                      'Deleted successfully',
+                      AppLocalizations.of(context)!.deletedSuccessfully,
                       textDirection: TextDirection.ltr,
                     ),
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                   ),
                 );
                 Navigator.of(context).pop();
