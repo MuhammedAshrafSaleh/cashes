@@ -5,6 +5,7 @@ import 'package:cashes/app/providers/cash_provider.dart';
 import 'package:cashes/app/providers/clients_transefer_provider.dart';
 import 'package:cashes/app/screens/cash/cash_list_widget.dart';
 import 'package:cashes/app/widget/custom_btn.dart';
+import 'package:cashes/app/widget/custom_circle_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 // import 'package:permission_handler/permission_handler.dart';
@@ -28,18 +29,6 @@ class CashScreen extends StatefulWidget {
 }
 
 class _CashScreenState extends State<CashScreen> {
-  // Future<void> requestStoragePermission() async {
-  //   var status = await Permission.storage.status;
-  //   if (!status.isGranted) {
-  //     status = await Permission.storage.request();
-  //     if (status.isGranted) {
-  //       print("Storage permission granted");
-  //     } else {
-  //       print("Storage permission denied");
-  //     }
-  //   }
-  // }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -70,27 +59,21 @@ class _CashScreenState extends State<CashScreen> {
     var project = ModalRoute.of(context)!.settings.arguments as Project;
     var cashProvider = Provider.of<CashProvider>(context);
     var authProvider = Provider.of<AuthManagerProvider>(context);
+    var projectProvider = Provider.of<ProjectProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(project.name ?? 'Zmzm Project'),
         toolbarHeight: 80.0,
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              projectProvider.getTotalMoney();
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_rounded)),
         actions: [
           IconButton(
             onPressed: () {
-              // showPrintDialog(
-              //   context: context,
-              //   onPressed: () {
-              //     PdfApi.createPdf(
-              //       Invoice(
-              //         projectName: project.name!,
-              //         engineerName: authProvider.currentUser!.name!,
-              //         items: cashProvider.cashes,
-              //         date: '30-07-2024',
-              //       ),
-              //     );
-              //   },
-              // );
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -194,15 +177,13 @@ class _CashScreenState extends State<CashScreen> {
         children: [
           screens[selectedIndex],
           isLoading
-              ? const Center(
+              ? Center(
                   child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(
-                      color: AppTheme.primaryColor,
-                    ),
-                    SizedBox(width: 10),
-                    Text('PDF is Opeing Now...')
+                    customProgress(),
+                    const SizedBox(width: 10),
+                    const Text('PDF is Opeing Now...')
                   ],
                 ))
               : const Center(),

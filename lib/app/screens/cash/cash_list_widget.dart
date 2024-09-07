@@ -1,5 +1,6 @@
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/project_provider.dart';
+import 'package:cashes/app/widget/custom_circle_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/cash.dart';
@@ -21,11 +22,51 @@ class _CashListWidgetState extends State<CashListWidget> {
   var authProvider;
   var projectProvider;
   bool _isSortAsc = true;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // Schedule the initialization after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Access the providers now
+      projectProvider = Provider.of<ProjectProvider>(context, listen: false);
+      authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
+
+      // Ensure authProvider is initialized
+      if (authProvider.currentUser != null) {
+        _fetchData();
+      }
+    });
+  }
+
+  void _fetchData() async {
+    setState(() {
+      _isLoading =
+          true; // Set loading state to true when starting to fetch data
+    });
+    try {
+      await cashProvider.getCashes(
+        userId: authProvider.currentUser.id!,
+        project: projectProvider.currentProject,
+      ); // Assuming you have a method to fetch data
+    } finally {
+      setState(() {
+        _isLoading = false; // Set loading state to false once data is fetched
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     authProvider = Provider.of<AuthManagerProvider>(context);
     cashProvider = Provider.of<CashProvider>(context);
     projectProvider = Provider.of<ProjectProvider>(context);
+
+    if (_isLoading) {
+      return customProgress();
+    }
     return cashProvider.cashes.isEmpty
         ? EmptyScreen(message: AppLocalizations.of(context)!.noCashes)
         : Directionality(

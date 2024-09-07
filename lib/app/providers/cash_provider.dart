@@ -43,7 +43,7 @@ class CashProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future addCash({
+  Future<void> addCash({
     required cash,
     required userId,
     required project,
@@ -86,7 +86,7 @@ class CashProvider extends ChangeNotifier {
     }
   }
 
-  void updateCash({
+  Future<void> updateCash({
     required Cash cash,
     required project,
     required userId,

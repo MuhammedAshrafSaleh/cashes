@@ -1,16 +1,15 @@
-import '../../core/theme.dart';
-import 'add_project_widget.dart';
-import 'project_list_widget.dart';
+import 'package:cashes/app/widget/custom_circle_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/project_provider.dart';
+import '../../core/theme.dart';
 import '../../providers/auth_manager_provider.dart';
-// ignore_for_file: prefer_typing_uninitialized_variables
-
+import '../../providers/project_provider.dart';
+import 'add_project_widget.dart';
+import 'project_list_widget.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
   static const String routeName = 'Home-Screen';
 
   @override
@@ -20,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var projectProvider;
   var authProvider;
+  bool _isLoading = false;
+  int selectedIndex = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -34,23 +35,43 @@ class _HomeScreenState extends State<HomeScreen> {
       if (authProvider.currentUser != null) {
         // projectProvider.getTotalMoney(uId: authProvider.currentUser!.id);
         projectProvider.getProjects(uId: authProvider.currentUser!.id);
+        _fetchData();
       }
     });
   }
 
-  int selectedIndex = 0;
+  void _fetchData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await projectProvider.getProjects(
+        uId: authProvider.currentUser.id!,
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     projectProvider = Provider.of<ProjectProvider>(context);
     authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
+    if (_isLoading) {
+      return customProgress();
+    }
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: ()async {
+        color: AppTheme.primaryColor,
+        backgroundColor: AppTheme.white,
+        onRefresh: () async {
           await Future.delayed(const Duration(milliseconds: 500));
-           projectProvider.getTotalMoney();
+          projectProvider.getTotalMoney();
         },
-        child: ProjectListWidget(user: authProvider.currentUser)),
+        child: ProjectListWidget(user: authProvider.currentUser),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.white,
         onPressed: () {

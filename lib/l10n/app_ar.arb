@@ -74,5 +74,6 @@
   "retry": "إعادة المحاولة",
   "noInternet": "لا يوجد اتصال بالإنترنت",
   "deleteProject": "حذف المشروع",
-  "editProject": "تعديل المشروع"
+  "editProject": "تعديل المشروع",
+  "total": "الإجمالى"
 }

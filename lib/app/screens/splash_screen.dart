@@ -1,6 +1,7 @@
 import 'package:cashes/app/core/theme.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/screens/home/home_screen.dart';
+import 'package:cashes/app/widget/custom_circle_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 300,
               ),
             ),
-            const CircularProgressIndicator(color: AppTheme.primaryColor),
+            customProgress(),
           ],
         ),
       ),

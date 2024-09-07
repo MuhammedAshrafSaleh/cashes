@@ -35,7 +35,7 @@ class ProjectProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getTotalMoney() {
+  Future<void> getTotalMoney() async {
     total = 0;
     for (Project project in projects) {
       total += int.parse(project.money!);
@@ -109,8 +109,10 @@ class ProjectProvider extends ChangeNotifier {
       projectId: project.id,
     );
     for (var cash in cashes) {
-      await FirebaseStorageManager.deleteCashImage(
-          cashId: getIdfromImage(url: cash.imageURl!));
+      if (cash.imageURl != null) {
+        await FirebaseStorageManager.deleteCashImage(
+            cashId: getIdfromImage(url: cash.imageURl!));
+      }
     }
     await FirebaseFirestoreManager.removeProjectById(
       userId: userId,
@@ -118,23 +120,5 @@ class ProjectProvider extends ChangeNotifier {
     );
     getProjects(uId: userId);
     DialogUtls.hideLoading(context: context);
-    // try {
-    //   DialogUtls.showLoading(context: context, message: 'Deleting now...');
-    //   await FirebaseFirestoreManager.removeProjectById(
-    //     userId: userId,
-    //     projectId: project.id!,
-    //   );
-    //   getProjects(uId: userId);
-    //   DialogUtls.hideLoading(context: context);
-    //   DialogUtls.showMessage(context: context, message: 'Deleted Successfully');
-    //   // Navigator.pop(context);
-    //   // Navigator.pop(context);
-    // } catch (e) {
-    //   if (context.mounted) {
-    //     DialogUtls.hideLoading(context: context);
-    //     DialogUtls.showMessage(context: context, message: e.toString());
-    //     // Navigator.pop(context);
-    //   }
-    // }
   }
 }

@@ -128,7 +128,7 @@ class ProjectItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${project.money ?? '0'}\$',
+                      '${project.money ?? '0'}EGP',
                       style: const TextStyle(
                         color: AppTheme.white,
                         fontSize: 20,

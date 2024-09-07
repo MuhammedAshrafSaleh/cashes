@@ -15,22 +15,41 @@ import '../../widget/custom_textfield.dart';
 import '../../widget/date_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AddUpdateTask extends StatelessWidget {
+class AddUpdateTask extends StatefulWidget {
   final bool isAdd;
   final int? index;
   const AddUpdateTask({super.key, required this.isAdd, this.index});
+
+  @override
+  State<AddUpdateTask> createState() => _AddUpdateTaskState();
+}
+
+class _AddUpdateTaskState extends State<AddUpdateTask> {
+  late final TextEditingController nameController;
+
+  late final TextEditingController priceController;
+
+  late final TextEditingController dateController;
+  void initState() {
+    super.initState();
+    final cashProvider = Provider.of<CashProvider>(context, listen: false);
+    final index = widget.index;
+
+    nameController = TextEditingController(
+        text: widget.isAdd ? cashProvider.cashes[index!].name : '');
+    priceController = TextEditingController(
+        text: widget.isAdd ? cashProvider.cashes[index!].price : '');
+    dateController = TextEditingController(
+        text: widget.isAdd ? cashProvider.cashes[index!].date : '');
+  }
+
   @override
   Widget build(BuildContext context) {
     var authProvider = Provider.of<AuthManagerProvider>(context);
     var cashProvider = Provider.of<CashProvider>(context);
     var projectProvider = Provider.of<ProjectProvider>(context);
-    GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final nameController = TextEditingController(
-        text: isAdd ? cashProvider.cashes[index!].name : '');
-    final priceController = TextEditingController(
-        text: isAdd ? cashProvider.cashes[index!].price : '');
-    final dateController = TextEditingController(
-        text: isAdd ? cashProvider.cashes[index!].date : '');
+    final formKey = GlobalKey<FormState>();
+
     return AlertDialog(
       backgroundColor: AppTheme.white,
       title: Text(
@@ -151,21 +170,22 @@ class AddUpdateTask extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CustomBtn(
-                    text: isAdd
+                    text: widget.isAdd
                         ? AppLocalizations.of(context)!.updateCash
                         : AppLocalizations.of(context)!.addCash,
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         var uuid = const Uuid();
-                        if (isAdd) {
-                          cashProvider.updateCash(
+                        if (widget.isAdd) {
+                          await cashProvider.updateCash(
                               cash: Cash(
-                                id: cashProvider.cashes[index!].id,
+                                id: cashProvider.cashes[widget.index!].id,
                                 name: nameController.text,
                                 cashNumber: '',
                                 price: priceController.text,
                                 date: dateController.text,
-                                imageURl: cashProvider.cashes[index!].imageURl,
+                                imageURl:
+                                    cashProvider.cashes[widget.index!].imageURl,
                               ),
                               project: projectProvider.currentProject,
                               userId: authProvider.currentUser!.id,
@@ -175,7 +195,7 @@ class AddUpdateTask extends StatelessWidget {
                                   ? true
                                   : false);
                         } else {
-                          cashProvider.addCash(
+                          await cashProvider.addCash(
                             cash: Cash(
                               id: uuid.v4(),
                               name: nameController.text,
@@ -189,7 +209,6 @@ class AddUpdateTask extends StatelessWidget {
                             context: context,
                           );
                         }
-                        projectProvider.getTotalMoney();
                         cashProvider.changeCurrentImage(null);
                         nameController.clear();
                         priceController.clear();
@@ -198,7 +217,7 @@ class AddUpdateTask extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              isAdd
+                              widget.isAdd
                                   ? AppLocalizations.of(context)!.updateProject
                                   : AppLocalizations.of(context)!.addCash,
                             ),
@@ -216,5 +235,13 @@ class AddUpdateTask extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    priceController.dispose();
+    dateController.dispose();
+    super.dispose();
   }
 }

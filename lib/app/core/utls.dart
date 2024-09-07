@@ -2,7 +2,13 @@ import 'package:intl/intl.dart';
 
 String formatDate(String date) {
   final DateTime dateTime = DateTime.parse(date);
-  final DateFormat formatter = DateFormat('yMMMd');
+  final DateFormat formatter =
+      DateFormat.yMMMd('ar'); // Set the locale to Arabic
+  return formatter.format(dateTime);
+}
+
+String formateTime(DateTime dateTime) {
+  final DateFormat formatter = DateFormat.jm('ar'); // Set the locale to Arabic
   return formatter.format(dateTime);
 }
 
