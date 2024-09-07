@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme.dart';
 import '../../widget/custom_dialog_widget.dart';
 import 'add_project_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class ProjectItem extends StatelessWidget {
@@ -26,50 +27,41 @@ class ProjectItem extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: (context) {
-                // DialogUtls.showDeleteConfirmationDialog(
-                //     context: context,
-                //     deleteFunction: () {
-                // DialogUtls.showLoading(
-                //     context: context, message: 'Deleting Now...');
-                //       projectProvider.deleteProject(
-                //         project: project,
-                //         userId: user.id,
-                //         context: context,
-                //       );
-                //       print('Deleted From this user ${user.id}');
-                //     });
-                // DialogUtls.hideLoading(context: context);
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text('Confirm Deletion'),
-                      content: const Text(
-                          'Are you sure you want to delete this item?'),
+                      title:
+                          Text(AppLocalizations.of(context)!.confirmDeletion),
+                      content: Text(AppLocalizations.of(context)!
+                          .confirmPasswordValidation),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text('Cancel'),
+                          child: Text(AppLocalizations.of(context)!.cancel),
                           onPressed: () {
                             Navigator.of(context).pop(); // Dismiss the dialog
                           },
                         ),
                         TextButton(
-                          child: const Text('Delete'),
+                          child: Text(AppLocalizations.of(context)!.delete),
                           onPressed: () {
                             DialogUtls.showLoading(
-                                context: context, message: 'Deleting now...');
+                                context: context,
+                                message:
+                                    AppLocalizations.of(context)!.deletingNow);
                             projectProvider.deleteProject(
                               project: project,
                               userId: user.id,
                               context: context,
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text(
-                                  'Deleted successfully',
+                                  AppLocalizations.of(context)!
+                                      .deletedSuccessfully,
                                   textDirection: TextDirection.ltr,
                                 ),
-                                duration: Duration(seconds: 2),
+                                duration: const Duration(seconds: 2),
                               ),
                             );
                             Navigator.of(context).pop();
@@ -83,7 +75,7 @@ class ProjectItem extends StatelessWidget {
               backgroundColor: AppTheme.redColor,
               foregroundColor: AppTheme.white,
               icon: Icons.delete,
-              label: 'Delete Task',
+              label: AppLocalizations.of(context)!.deleteProject,
             ),
           ],
         ),
@@ -102,7 +94,7 @@ class ProjectItem extends StatelessWidget {
               backgroundColor: AppTheme.lightBlue,
               foregroundColor: Colors.white,
               icon: Icons.archive,
-              label: 'Edit',
+              label: AppLocalizations.of(context)!.editProject,
             ),
           ],
         ),

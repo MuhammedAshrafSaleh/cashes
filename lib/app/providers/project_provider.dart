@@ -30,8 +30,6 @@ class ProjectProvider extends ChangeNotifier {
         await FirebaseFirestoreManager.getAllProjectByUserId(userId: uId);
     total = 0;
     for (Project project in projects) {
-      print("Print : ${project.name} ");
-      print("Price : ${project.money} ");
       total += int.parse(project.money!);
     }
     notifyListeners();
@@ -40,8 +38,6 @@ class ProjectProvider extends ChangeNotifier {
   getTotalMoney() {
     total = 0;
     for (Project project in projects) {
-      print("Print : ${project.name} ");
-      print("Price : ${project.money} ");
       total += int.parse(project.money!);
     }
     notifyListeners();

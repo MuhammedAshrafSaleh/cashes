@@ -2,13 +2,13 @@ import 'package:intl/intl.dart';
 
 String formatDate(String date) {
   final DateTime dateTime = DateTime.parse(date);
-  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+  final DateFormat formatter = DateFormat('yMMMd');
   return formatter.format(dateTime);
 }
 
 String formatDateWithoutTime(String date) {
   final DateTime dateTime = DateTime.parse(date);
-  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  final DateFormat formatter = DateFormat('yMMMd');
   return formatter.format(dateTime);
 }
 
