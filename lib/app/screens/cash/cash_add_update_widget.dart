@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -124,14 +125,16 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                               TextButton(
                                 onPressed: () => Navigator.of(context)
                                     .pop(ImageSource.gallery),
-                                child: Text(
-                                  AppLocalizations.of(context)!.gallery,
-                                ),
+                                child:
+                                    Text(AppLocalizations.of(context)!.gallery),
                               ),
                             ],
                           );
                         },
                       );
+
+                      // Log the selected source
+                      print('Selected ImageSource: $source');
 
                       if (source != null) {
                         final picker = ImagePicker();
@@ -178,36 +181,48 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                         var uuid = const Uuid();
                         if (widget.isAdd) {
                           await cashProvider.updateCash(
-                              cash: Cash(
-                                id: cashProvider.cashes[widget.index!].id,
-                                name: nameController.text,
-                                cashNumber: '',
-                                price: priceController.text,
-                                date: dateController.text,
-                                imageURl:
-                                    cashProvider.cashes[widget.index!].imageURl,
-                              ),
-                              project: projectProvider.currentProject,
-                              userId: authProvider.currentUser!.id,
-                              imageFile: cashProvider.currentImage,
-                              context: context,
-                              isImageUpdated: cashProvider.currentImage != null
-                                  ? true
-                                  : false);
-                        } else {
-                          await cashProvider.addCash(
                             cash: Cash(
-                              id: uuid.v4(),
+                              id: cashProvider.cashes[widget.index!].id,
                               name: nameController.text,
                               cashNumber: '',
                               price: priceController.text,
                               date: dateController.text,
+                              imageURl:
+                                  cashProvider.cashes[widget.index!].imageURl,
                             ),
                             project: projectProvider.currentProject,
                             userId: authProvider.currentUser!.id,
                             imageFile: cashProvider.currentImage,
                             context: context,
+                            isImageUpdated: cashProvider.currentImage != null
+                                ? true
+                                : false,
                           );
+                          print("Updated");
+                        } else {
+                          if (cashProvider.cashes.length >= 25) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("لا يمكنك الاضافة أكثر من 25"),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          } else {
+                            await cashProvider.addCash(
+                              cash: Cash(
+                                id: uuid.v4(),
+                                name: nameController.text,
+                                cashNumber: '',
+                                price: priceController.text,
+                                date: dateController.text,
+                              ),
+                              project: projectProvider.currentProject,
+                              userId: authProvider.currentUser!.id,
+                              imageFile: cashProvider.currentImage,
+                              context: context,
+                            );
+                          }
                         }
                         cashProvider.changeCurrentImage(null);
                         nameController.clear();

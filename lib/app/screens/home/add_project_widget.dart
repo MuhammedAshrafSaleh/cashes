@@ -1,7 +1,6 @@
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/project_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 

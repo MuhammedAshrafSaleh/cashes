@@ -7,6 +7,7 @@ Widget imageCard({
   required String name,
   required BuildContext context,
   bool edit = false,
+  bool deleteButton = false,
   onPressed,
   onPressedDelete,
 }) {
@@ -87,10 +88,12 @@ Widget imageCard({
                               ),
                             )
                           : const SizedBox(),
-                      edit
+                      deleteButton
                           ? Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 15.0, bottom: 15),
+                              padding: const EdgeInsets.only(
+                                left: 10.0,
+                                bottom: 10.0,
+                              ),
                               child: IconButton(
                                 onPressed: onPressedDelete,
                                 icon: const Icon(

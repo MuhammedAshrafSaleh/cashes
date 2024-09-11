@@ -1,6 +1,7 @@
+import 'package:cashes/app/core/theme.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/providers/project_provider.dart';
-import 'package:cashes/app/widget/custom_circle_progress.dart';
+import 'package:cashes/app/widget/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/cash.dart';
@@ -65,7 +66,10 @@ class _CashListWidgetState extends State<CashListWidget> {
     projectProvider = Provider.of<ProjectProvider>(context);
 
     if (_isLoading) {
-      return customProgress();
+      return const Loader(
+        color1: AppTheme.primaryColor,
+        color2: AppTheme.secondaryColor,
+      );
     }
     return cashProvider.cashes.isEmpty
         ? EmptyScreen(message: AppLocalizations.of(context)!.noCashes)
@@ -200,16 +204,17 @@ class _CashListWidgetState extends State<CashListWidget> {
             IconButton(
                 onPressed: () {
                   DialogUtls.showDeleteConfirmationDialog(
-                      context: context,
-                      deleteFunction: () {
-                        projectProvider.getTotalMoney();
-                        cashProvider.deleteCash(
-                          userId: authProvider.currentUser.id,
-                          project: projectProvider.currentProject,
-                          cash: cash,
-                          context: context,
-                        );
-                      });
+                    context: context,
+                    deleteFunction: () async {
+                      projectProvider.getTotalMoney();
+                      await cashProvider.deleteCash(
+                        userId: authProvider.currentUser.id,
+                        project: projectProvider.currentProject,
+                        cash: cash,
+                        context: context,
+                      );
+                    },
+                  );
                 },
                 icon: const Icon(Icons.delete)),
             const SizedBox(

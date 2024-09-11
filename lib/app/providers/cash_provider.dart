@@ -15,6 +15,7 @@ class CashProvider extends ChangeNotifier {
 
   void changeCurrentImage(newImage) {
     currentImage = newImage;
+    print("Current Image Updated: $currentImage");
     notifyListeners();
   }
 
@@ -73,8 +74,6 @@ class CashProvider extends ChangeNotifier {
           message: AppLocalizations.of(context)!.addSucceccfuly);
       Navigator.pop(context);
       Navigator.pop(context);
-      // Navigator.pop(context);
-      // Navigator.pop(context);
     } catch (e) {
       if (context.mounted) {
         DialogUtls.hideLoading(context: context);
@@ -93,6 +92,8 @@ class CashProvider extends ChangeNotifier {
     required imageFile,
   }) async {
     try {
+      DialogUtls.showLoading(
+          context: context, message: AppLocalizations.of(context)!.loading);
       if (imageFile != null) {
         if (isImageUpdated) {
           await FirebaseStorageManager.deleteCashImage(
@@ -104,6 +105,7 @@ class CashProvider extends ChangeNotifier {
           id: uuid.v4(),
         );
         cash.imageURl = imageUrl;
+        print("AddDDDDDDDDDDDDDDDDDDDDDDDDDD");
       }
       await FirebaseFirestoreManager.updateCash(
         cash: cash,
@@ -116,6 +118,7 @@ class CashProvider extends ChangeNotifier {
           context: context,
           message: AppLocalizations.of(context)!.updatedSuccessfully);
       Navigator.pop(context);
+      Navigator.pop(context);
     } catch (e) {
       if (context.mounted) {
         DialogUtls.hideLoading(context: context);
@@ -125,16 +128,38 @@ class CashProvider extends ChangeNotifier {
     }
   }
 
-  void deleteCash({
+  Future<void> deleteImageCash({
+    required Cash cash,
+    required project,
+    required userId,
+    required context,
+  }) async {
+    try {
+      await FirebaseStorageManager.deleteCashImage(
+          cashId: getIdfromImage(url: cash.imageURl!));
+      cash.imageURl = '';
+      await FirebaseFirestoreManager.updateCash(
+        cash: cash,
+        projectId: project.id,
+        userId: userId,
+      );
+      await getCashes(userId: userId, project: project);
+    } catch (e) {
+      if (context.mounted) {
+        DialogUtls.hideLoading(context: context);
+        DialogUtls.showMessage(context: context, message: e.toString());
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  Future<void> deleteCash({
     required Cash cash,
     required userId,
     required project,
     required context,
   }) async {
     try {
-      DialogUtls.showLoading(
-          context: context, message: AppLocalizations.of(context)!.deletingNow);
-
       await FirebaseFirestoreManager.deleteCashByUserIdAndProjectId(
         userId: userId,
         projectId: project.id,
@@ -146,12 +171,6 @@ class CashProvider extends ChangeNotifier {
       );
 
       await getCashes(userId: userId, project: project);
-
-      DialogUtls.hideLoading(context: context);
-      DialogUtls.showMessage(
-        context: context,
-        message: AppLocalizations.of(context)!.deletedSuccessfully,
-      );
     } catch (e) {
       if (context.mounted) {
         DialogUtls.hideLoading(context: context);

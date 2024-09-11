@@ -5,7 +5,8 @@ import 'package:cashes/app/providers/cash_provider.dart';
 import 'package:cashes/app/providers/clients_transefer_provider.dart';
 import 'package:cashes/app/screens/cash/cash_list_widget.dart';
 import 'package:cashes/app/widget/custom_btn.dart';
-import 'package:cashes/app/widget/custom_circle_progress.dart';
+import 'package:cashes/app/widget/custom_dialog_widget.dart';
+import 'package:cashes/app/widget/snakebar.dart';
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 // import 'package:permission_handler/permission_handler.dart';
@@ -54,7 +55,7 @@ class _CashScreenState extends State<CashScreen> {
 
   // var cashProvider;
   int selectedIndex = 0;
-  bool isLoading = false;
+  // bool isLoading = false;
   OurCopmanies? _character = OurCopmanies.zmzm;
   @override
   Widget build(BuildContext context) {
@@ -81,6 +82,20 @@ class _CashScreenState extends State<CashScreen> {
               },
               icon: const Icon(Icons.arrow_back_rounded)),
           actions: [
+            IconButton(
+              onPressed: () async {
+                DialogUtls.showLoading(
+                    context: context,
+                    message: AppLocalizations.of(context)!.loading);
+                await cashProvider.getCashes(
+                    userId: authProvider.currentUser!.id!, project: project);
+                DialogUtls.hideLoading(context: context);
+                DialogUtls.showMessage(
+                    context: context, message: "تم التحديث بنجاح");
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.refresh),
+            ),
             IconButton(
               onPressed: () {
                 showDialog(
@@ -156,11 +171,12 @@ class _CashScreenState extends State<CashScreen> {
                                         onPressed: () async {
                                           if (formKey.currentState!
                                               .validate()) {
-                                            if (mounted) {}
-                                            setState(() {
-                                              _character =
-                                                  dialogCharacter; // Save the selected value back to the state
-                                            });
+                                            if (mounted) {
+                                              setState(() {
+                                                _character =
+                                                    dialogCharacter; // Save the selected value back to the state
+                                              });
+                                            }
                                             if (cashProvider.cashes.isEmpty) {
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
@@ -175,40 +191,44 @@ class _CashScreenState extends State<CashScreen> {
                                                 ),
                                               );
                                             } else {
-                                              if (mounted) {
-                                                setState(() {
-                                                  isLoading = true;
-                                                });
-                                              }
                                               Navigator.pop(context);
+                                              showSnackBar(
+                                                content:
+                                                    "يتم الان فتح العهدة...",
+                                                context: context,
+                                              );
                                               try {
+                                                final projectName =
+                                                    project.name ?? '';
+                                                final engineerName =
+                                                    authProvider.currentUser
+                                                            ?.name ??
+                                                        '';
+
                                                 final pdfFile =
                                                     await PdfApi.createPdf(
                                                   Invoice(
-                                                    projectName: project.name!,
-                                                    engineerName: authProvider
-                                                        .currentUser!.name!,
+                                                    projectName: projectName,
+                                                    engineerName: engineerName,
                                                     items: cashProvider.cashes,
                                                     isZmzm: _character ==
-                                                            OurCopmanies.zmzm
-                                                        ? true
-                                                        : false, // Use selected value
+                                                        OurCopmanies.zmzm,
                                                     date: formatDateWithoutTime(
                                                         dateController.text),
                                                   ),
                                                 );
 
-                                                await OpenFilex.open(
-                                                    pdfFile.path);
+                                                // Attempt to open the PDF if it is valid
+                                                if (pdfFile != null &&
+                                                    pdfFile.path != null) {
+                                                  await OpenFilex.open(
+                                                      pdfFile.path);
+                                                } else {
+                                                  print(
+                                                      "Error: Failed to create or open the PDF file.");
+                                                }
                                               } catch (e) {
                                                 print('Failed to open PDF: $e');
-                                              } finally {
-                                                if (mounted) {
-                                                  setState(() {
-                                                    isLoading = false;
-                                                  });
-                                                }
-                                                Navigator.pop(context);
                                               }
                                             }
                                           }
@@ -233,17 +253,6 @@ class _CashScreenState extends State<CashScreen> {
         body: Stack(
           children: [
             screens[selectedIndex],
-            isLoading
-                ? Center(
-                    child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      customProgress(),
-                      const SizedBox(width: 10),
-                      const Text('PDF is Opeing Now...')
-                    ],
-                  ))
-                : const Center(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -260,9 +269,11 @@ class _CashScreenState extends State<CashScreen> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: (currentIndex) {
-            setState(() {
-              selectedIndex = currentIndex;
-            });
+            if (mounted) {
+              setState(() {
+                selectedIndex = currentIndex;
+              });
+            }
           },
           items: [
             BottomNavigationBarItem(

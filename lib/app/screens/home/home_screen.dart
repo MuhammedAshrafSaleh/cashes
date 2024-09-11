@@ -1,4 +1,4 @@
-import 'package:cashes/app/widget/custom_circle_progress.dart';
+import 'package:cashes/app/widget/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme.dart';
@@ -49,9 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
         uId: authProvider.currentUser.id!,
       );
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -60,7 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
     projectProvider = Provider.of<ProjectProvider>(context);
     authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
     if (_isLoading) {
-      return customProgress();
+      return const Loader(
+        color1: AppTheme.primaryColor,
+        color2: AppTheme.secondaryColor,
+      );
     }
     return Scaffold(
       body: RefreshIndicator(
