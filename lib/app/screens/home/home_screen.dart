@@ -67,21 +67,24 @@ class _HomeScreenState extends State<HomeScreen> {
         color2: AppTheme.secondaryColor,
       );
     }
-    return Scaffold(
-      body: RefreshIndicator(
-          color: AppTheme.primaryColor,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: RefreshIndicator(
+            color: AppTheme.primaryColor,
+            backgroundColor: AppTheme.white,
+            onRefresh: () async {
+              await Future.delayed(const Duration(milliseconds: 500));
+              projectProvider.getTotalMoney();
+            },
+            child: ProjectListWidget(user: authProvider.currentUser)),
+        floatingActionButton: FloatingActionButton(
           backgroundColor: AppTheme.white,
-          onRefresh: () async {
-            await Future.delayed(const Duration(milliseconds: 500));
-            projectProvider.getTotalMoney();
+          onPressed: () {
+            showProjectDialog(context: context, isAdd: true, project: null);
           },
-          child: ProjectListWidget(user: authProvider.currentUser)),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.white,
-        onPressed: () {
-          showProjectDialog(context: context, isAdd: true, project: null);
-        },
-        child: const Icon(Icons.add, color: AppTheme.primaryColor),
+          child: const Icon(Icons.add, color: AppTheme.primaryColor),
+        ),
       ),
     );
   }
