@@ -95,49 +95,6 @@ class FirebaseAuthManager {
     }
   }
 
-  // static Future<void> login(
-  //     {required email, required password, required context}) async {
-  //   DialogUtls.showLoading(context: context, message: 'Loading...');
-  //   try {
-  //     var authProvider = Provider.of<AuthManagerProvider>(context,
-  //         listen:
-  //             false); // when you call the provider outside the build add listen:false
-  //     final credential = await FirebaseAuth.instance
-  //         .signInWithEmailAndPassword(email: email, password: password);
-  //     // print(credential.user!.uid);
-  //     DialogUtls.hideLoading(context: context);
-  //     DialogUtls.showMessage(
-  //         context: context, message: 'Successfully Loged In');
-  //     var myCurrentUser =
-  //         await FirebaseFirestoreManager.getUser(userId: credential.user!.uid);
-  //     if (myCurrentUser != null) {
-  //       authProvider.updateUser(myCurrentUser);
-  //       Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'user-not-found') {
-  //       DialogUtls.hideLoading(context: context);
-  //       DialogUtls.showMessage(
-  //           context: context, message: 'No user found for that email.');
-  //       print('No user found for that email.');
-  //     } else if (e.code == 'wrong-password') {
-  //       DialogUtls.hideLoading(context: context);
-  //       DialogUtls.showMessage(
-  //           context: context,
-  //           message: 'Wrong password provided for that user.');
-  //       print('Wrong password provided for that user.');
-  //     } else if (e.code == 'invalid-credential') {
-  //       DialogUtls.showMessage(
-  //           context: context, message: 'Invalid credentials provided.');
-  //       DialogUtls.hideLoading(context: context);
-  //       print('Invalid credentials provided.');
-  //     } else {
-  //       DialogUtls.hideLoading(context: context);
-  //       DialogUtls.showMessage(context: context, message: e.toString());
-  //     }
-  //   }
-  // }
-
   // TODO: How?
   static void checkUserState(
       {required context, required AuthManagerProvider authProvider}) {
@@ -165,5 +122,15 @@ class FirebaseAuthManager {
 
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  static Future<void> resetPassword({required String email}) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message.toString());
+    } catch (e) {
+      throw Exception(e.toString());
+    }
   }
 }

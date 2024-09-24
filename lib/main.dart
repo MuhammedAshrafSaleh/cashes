@@ -1,3 +1,5 @@
+import 'package:cashes/app/screens/auth/foreget_password.dart';
+
 import 'app/screens/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +53,8 @@ class MyApp extends StatelessWidget {
       initialRoute: SplashScreen.routeName,
       routes: {
         RegisterScreen.routeName: (_) => RegisterScreen(),
-        LoginScreen.routeName: (_) => LoginScreen(),
+        LoginScreen.routeName: (_) => const LoginScreen(),
+        ForegetPasswordScreen.routeName: (_) => const ForegetPasswordScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
         CashScreen.routeName: (_) => const CashScreen(),
         SplashScreen.routeName: (_) => const SplashScreen(),

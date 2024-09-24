@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 String formatDate(String date) {
@@ -30,4 +33,33 @@ String getIdfromImage({required String url}) {
 String getIdFromClientId({required String url}) {
   String id = url.split('%2F').last.split('.').first;
   return id;
+}
+
+Future<File?> pickGallaryImage() async {
+  try {
+    final xFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      // maxHeight: 400,
+    );
+    if (xFile != null) {
+      return File(xFile.path);
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+Future<File?> pickCameraImage() async {
+  try {
+    final xFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+    if (xFile != null) {
+      return File(xFile.path);
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
 }

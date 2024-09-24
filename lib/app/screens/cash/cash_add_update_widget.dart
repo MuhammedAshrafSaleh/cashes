@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:cashes/app/core/utls.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -31,6 +31,19 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
   late final TextEditingController priceController;
 
   late final TextEditingController dateController;
+  File? image;
+  void selectImage(bool isGallary) async {
+    final pickedImage =
+        isGallary ? await pickGallaryImage() : await pickCameraImage();
+    if (pickedImage != null) {
+      setState(() {
+        image = pickedImage;
+      });
+    }
+    Navigator.pop(context);
+  }
+
+  @override
   void initState() {
     super.initState();
     final cashProvider = Provider.of<CashProvider>(context, listen: false);
@@ -54,7 +67,6 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
     return AlertDialog(
       backgroundColor: AppTheme.white,
       title: Text(
-        // TODO: Change
         AppLocalizations.of(context)!.cashDetails,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
@@ -109,7 +121,7 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                   CustomBtn(
                     onPressed: () async {
                       // Show a dialog to let the user choose between camera and gallery
-                      final ImageSource? source = await showDialog<ImageSource>(
+                      await showDialog<ImageSource>(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
@@ -117,14 +129,17 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                                 Text(AppLocalizations.of(context)!.selectImage),
                             actions: <Widget>[
                               TextButton(
-                                onPressed: () => Navigator.of(context)
-                                    .pop(ImageSource.camera),
+                                onPressed: () {
+                                  selectImage(false);
+                                  // Navigator.pop(context);
+                                },
                                 child:
                                     Text(AppLocalizations.of(context)!.camera),
                               ),
                               TextButton(
-                                onPressed: () => Navigator.of(context)
-                                    .pop(ImageSource.gallery),
+                                onPressed: () {
+                                  selectImage(true);
+                                },
                                 child:
                                     Text(AppLocalizations.of(context)!.gallery),
                               ),
@@ -134,32 +149,15 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                       );
 
                       // Log the selected source
-                      print('Selected ImageSource: $source');
-
-                      if (source != null) {
-                        final picker = ImagePicker();
-                        final pickedFile = await picker.pickImage(
-                          source: source,
-                          imageQuality: 50,
+                      print('Selected ImageSource: $image');
+                      if (image != null) {
+                        cashProvider.changeCurrentImage(image);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .imageAddedSuccess),
+                          ),
                         );
-
-                        if (pickedFile != null) {
-                          cashProvider
-                              .changeCurrentImage(File(pickedFile.path));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .imageAddedSuccess),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .noImageSelected),
-                            ),
-                          );
-                        }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

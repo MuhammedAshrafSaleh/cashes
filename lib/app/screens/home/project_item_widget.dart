@@ -33,8 +33,8 @@ class ProjectItem extends StatelessWidget {
                     return AlertDialog(
                       title:
                           Text(AppLocalizations.of(context)!.confirmDeletion),
-                      content: Text(AppLocalizations.of(context)!
-                          .confirmPasswordValidation),
+                      content: Text(
+                          AppLocalizations.of(context)!.confimQuestionDeletion),
                       actions: <Widget>[
                         TextButton(
                           child: Text(AppLocalizations.of(context)!.cancel),

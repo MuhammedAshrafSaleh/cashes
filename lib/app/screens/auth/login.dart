@@ -1,3 +1,4 @@
+import 'package:cashes/app/screens/auth/foreget_password.dart';
 import 'package:cashes/app/screens/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -11,7 +12,7 @@ import '../../widget/custom_textfield.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
   static const routeName = 'LoginScreen';
 
   @override
@@ -101,7 +102,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 30),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, ForegetPasswordScreen.routeName);
+                          },
+                          child: const Text(
+                            "هل نسيت كلمة السر ؟",
+                            style: TextStyle(color: AppTheme.primaryColor),
+                          ),
+                        ),
+                      ),
                       CustomBtn(
                         text: AppLocalizations.of(context)!.logIn,
                         onPressed: () {
@@ -111,7 +124,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               email: _emailController.text,
                               password: _passwordController.text,
                             );
-
                             _emailController.clear();
                             _passwordController.clear();
                           }
