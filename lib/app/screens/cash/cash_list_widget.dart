@@ -107,8 +107,26 @@ class _CashListWidgetState extends State<CashListWidget> {
           });
         },
       ),
-      const DataColumn(
-        label: Expanded(
+      DataColumn(
+        onSort: (columnIndex, _) {
+          setState(() {
+            if (_isSortAsc) {
+              cashProvider.cashes.sort((a, b) {
+                DateTime dateA = DateTime.tryParse(a.date!) ?? DateTime(0);
+                DateTime dateB = DateTime.tryParse(b.date!) ?? DateTime(0);
+                return dateA.compareTo(dateB);
+              });
+            } else {
+              cashProvider.cashes.sort((a, b) {
+                DateTime dateA = DateTime.tryParse(a.date!) ?? DateTime(0);
+                DateTime dateB = DateTime.tryParse(b.date!) ?? DateTime(0);
+                return dateB.compareTo(dateA);
+              });
+            }
+            _isSortAsc = !_isSortAsc;
+          });
+        },
+        label: const Expanded(
           child: Text(
             'التاريخ',
             textAlign: TextAlign.center,

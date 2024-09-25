@@ -15,6 +15,26 @@ class FirebaseFirestoreManager {
             toFirestore: (appUser, options) => appUser.toFireStore());
   }
 
+  static Future<List<AppUser>> getAllUsers() async {
+    try {
+      // Get the users collection reference
+      var usersCollection = getUsersCollection();
+
+      // Fetch all users
+      var querySnapshot = await usersCollection.get();
+
+      // Map the fetched documents into a list of AppUser objects
+      List<AppUser> users =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+
+      return users;
+    } catch (e) {
+      // Handle any errors here (e.g., logging)
+      print("Error fetching users: $e");
+      return [];
+    }
+  }
+
   static Future<void> addUserToFireStore({required AppUser user}) {
     return getUsersCollection().doc(user.id).set(user);
   }

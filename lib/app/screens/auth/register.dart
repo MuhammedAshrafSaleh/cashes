@@ -61,6 +61,10 @@ class RegisterScreen extends StatelessWidget {
                           if (value == null || value.isEmpty) {
                             return AppLocalizations.of(context)!.nameValidation;
                           }
+                          // TOOD:
+                          if (value.length > 20) {
+                            return "Name should not be more than 20";
+                          }
                           return null;
                         },
                       ),

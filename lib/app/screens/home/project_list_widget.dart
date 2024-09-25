@@ -39,6 +39,8 @@ class ProjectListWidget extends StatelessWidget {
                     children: [
                       Text(
                         '${AppLocalizations.of(context)!.welcome}, $name',
+                        // overflow: TextOverflow.ellipsis,
+                        // maxLines: 2,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -47,8 +49,10 @@ class ProjectListWidget extends StatelessWidget {
                       ),
                       Text(
                         '${AppLocalizations.of(context)!.yourProjects}, $name',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: AppTheme.black,
                         ),

@@ -15,7 +15,7 @@ class CashProvider extends ChangeNotifier {
 
   void changeCurrentImage(newImage) {
     currentImage = newImage;
-    print("Current Image Updated: $currentImage");
+    // print("Current Image Updated: $currentImage");
     notifyListeners();
   }
 
@@ -32,6 +32,11 @@ class CashProvider extends ChangeNotifier {
       userId: userId,
       projectId: project.id,
     );
+    cashes.sort((a, b) {
+      DateTime dateA = DateTime.tryParse(a.date ?? '') ?? DateTime(0);
+      DateTime dateB = DateTime.tryParse(b.date ?? '') ?? DateTime(0);
+      return dateA.compareTo(dateB);
+    });
     int total = 0;
     for (var cash in cashes) {
       total += int.parse(cash.price ?? '');

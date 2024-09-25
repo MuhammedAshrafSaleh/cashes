@@ -64,12 +64,19 @@ Widget imageCard({
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 15.0, bottom: 15),
-                        child: Text(
-                          name,
-                          style: const TextStyle(
-                            color: AppTheme.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.6,
+                          ),
+                          child: Text(
+                            name,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              color: AppTheme.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

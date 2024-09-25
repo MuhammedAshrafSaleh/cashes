@@ -26,11 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     // Schedule the initialization after the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Access the providers now
       projectProvider = Provider.of<ProjectProvider>(context, listen: false);
       authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
-
       // Ensure authProvider is initialized
       if (authProvider.currentUser != null) {
         // projectProvider.getTotalMoney(uId: authProvider.currentUser!.id);
@@ -61,6 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     projectProvider = Provider.of<ProjectProvider>(context);
     authProvider = Provider.of<AuthManagerProvider>(context, listen: false);
+    final bool showBackButton =
+        ModalRoute.of(context)?.settings.arguments as bool? ?? false;
+
     if (_isLoading) {
       return const Loader(
         color1: AppTheme.primaryColor,
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     return PopScope(
-      canPop: false,
+      canPop: showBackButton,
       child: Scaffold(
         body: RefreshIndicator(
             color: AppTheme.primaryColor,
@@ -76,11 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
             onRefresh: () async {
               await Future.delayed(const Duration(milliseconds: 500));
               projectProvider.getTotalMoney();
+              projectProvider.getProjects(uId: authProvider.currentUser.id!);
             },
             child: ProjectListWidget(user: authProvider.currentUser)),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppTheme.white,
-          onPressed: () {
+          onPressed: () async {
+            await authProvider.fetchUsers();
             showProjectDialog(context: context, isAdd: true, project: null);
           },
           child: const Icon(Icons.add, color: AppTheme.primaryColor),

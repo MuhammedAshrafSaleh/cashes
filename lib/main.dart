@@ -1,4 +1,5 @@
 import 'package:cashes/app/screens/auth/foreget_password.dart';
+import 'package:cashes/app/screens/users/users_home.dart';
 
 import 'app/screens/auth/login.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightMode,
-      initialRoute: SplashScreen.routeName,
+      // initialRoute: SplashScreen.routeName,
+      initialRoute: UsersHome.routeName,
       routes: {
         RegisterScreen.routeName: (_) => RegisterScreen(),
         LoginScreen.routeName: (_) => const LoginScreen(),
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (_) => HomeScreen(),
         CashScreen.routeName: (_) => const CashScreen(),
         SplashScreen.routeName: (_) => const SplashScreen(),
+        UsersHome.routeName: (_) => const UsersHome(),
       },
       locale: const Locale('ar'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

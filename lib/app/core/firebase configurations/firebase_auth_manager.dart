@@ -1,6 +1,7 @@
 import 'package:cashes/app/core/firebase%20configurations/firebase_firebase_manager.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
 import 'package:cashes/app/screens/auth/login.dart';
+import 'package:cashes/app/screens/users/users_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -113,6 +114,17 @@ class FirebaseAuthManager {
             context,
             HomeScreen.routeName,
           );
+          // if (myCurrentUser!.email == "") {
+          //   Navigator.pushReplacementNamed(
+          //     context,
+          //     UsersHome.routeName,
+          //   );
+          // } else {
+          //   Navigator.pushReplacementNamed(
+          //     context,
+          //     HomeScreen.routeName,
+          //   );
+          // }
         } else {
           print('Context is no longer valid');
         }
