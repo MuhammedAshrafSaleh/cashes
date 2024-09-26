@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cashes/app/core/utls.dart';
+import 'package:cashes/app/models/project.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -176,6 +177,7 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                         : AppLocalizations.of(context)!.addCash,
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
+                        Project project = projectProvider.currentProject!;
                         var uuid = const Uuid();
                         if (widget.isAdd) {
                           await cashProvider.updateCash(
@@ -196,7 +198,7 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                                 ? true
                                 : false,
                           );
-                          print("Updated");
+                          project.hasNotification = "تم التعديل";
                         } else {
                           if (cashProvider.cashes.length >= 25) {
                             Navigator.pop(context);
@@ -220,8 +222,15 @@ class _AddUpdateTaskState extends State<AddUpdateTask> {
                               imageFile: cashProvider.currentImage,
                               context: context,
                             );
+                            project.hasNotification = "تم الاضافة";
                           }
                         }
+                        print(project.hasNotification);
+                        projectProvider.updateProject(
+                          project: project,
+                          userId: authProvider.currentUser!.id,
+                          context: context,
+                        );
                         cashProvider.changeCurrentImage(null);
                         nameController.clear();
                         priceController.clear();

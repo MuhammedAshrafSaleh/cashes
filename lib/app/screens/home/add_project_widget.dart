@@ -94,7 +94,7 @@ class AddUpdateProject extends StatelessWidget {
                                   name: nameController.text,
                                   money: project!.money ?? '0',
                                   date: project!.date,
-                                  type: typeController.text,
+                                  type: '',
                                   userId: authProvider.currentUser!.id,
                                 ),
                                 userId: authProvider.currentUser!.id,

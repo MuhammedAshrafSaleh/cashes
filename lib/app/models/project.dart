@@ -6,6 +6,7 @@ class Project {
   String? date;
   String? type;
   String? userId;
+  String? hasNotification;
 
   Project({
     required this.id,
@@ -14,6 +15,7 @@ class Project {
     required this.date,
     required this.type,
     required this.userId,
+    this.hasNotification,
   });
 
   Project.formFirestore(Map<String, dynamic> data)
@@ -24,6 +26,7 @@ class Project {
           date: data['date'] as String,
           type: data['type'] as String,
           userId: data['userId'] as String,
+          hasNotification: data['hasNotification'] as String?,
         );
 
   Map<String, dynamic> toFirestore() {
@@ -34,6 +37,7 @@ class Project {
       'date': date,
       'type': type,
       'userId': userId,
+      'hasNotification': hasNotification,
     };
   }
 }

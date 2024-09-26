@@ -1,5 +1,6 @@
 import 'package:cashes/app/screens/auth/foreget_password.dart';
 import 'package:cashes/app/screens/users/users_home.dart';
+import 'package:cashes/app/screens/users/users_notifications.dart';
 
 import 'app/screens/auth/login.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         CashScreen.routeName: (_) => const CashScreen(),
         SplashScreen.routeName: (_) => const SplashScreen(),
         UsersHome.routeName: (_) => const UsersHome(),
+        UsersNotifications.routeName: (_) => const UsersNotifications(),
       },
       locale: const Locale('ar'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

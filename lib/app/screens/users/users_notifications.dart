@@ -1,21 +1,22 @@
 import 'package:cashes/app/core/theme.dart';
 import 'package:cashes/app/models/app_user.dart';
+import 'package:cashes/app/models/project.dart';
 import 'package:cashes/app/providers/auth_manager_provider.dart';
-import 'package:cashes/app/screens/home/home_screen.dart';
-import 'package:cashes/app/screens/users/users_notifications.dart';
+import 'package:cashes/app/providers/project_provider.dart';
+import 'package:cashes/app/screens/cash/cash_screen.dart';
 import 'package:cashes/app/widget/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class UsersHome extends StatefulWidget {
-  static const String routeName = "UsersHomeScreen";
-  const UsersHome({super.key});
+class UsersNotifications extends StatefulWidget {
+  static const String routeName = "UsersNotifications";
+  const UsersNotifications({super.key});
 
   @override
-  State<UsersHome> createState() => _UsersHomeState();
+  State<UsersNotifications> createState() => _UsersNotificationsState();
 }
 
-class _UsersHomeState extends State<UsersHome> {
+class _UsersNotificationsState extends State<UsersNotifications> {
   @override
   void initState() {
     super.initState();
@@ -29,29 +30,18 @@ class _UsersHomeState extends State<UsersHome> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthManagerProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'كل المستخدمين',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: const Text("الإشعارات"),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, UsersNotifications.routeName);
-          },
-          icon: const Icon(Icons.notifications),
-        ),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
           await Future.delayed(const Duration(milliseconds: 500));
           authProvider.fetchUsers();
         },
-        child: authProvider.users.isEmpty
+        child: authProvider.notifications.isEmpty
             ? const Loader(
                 color1: AppTheme.primaryColor,
                 color2: AppTheme.secondaryColor,
@@ -60,10 +50,13 @@ class _UsersHomeState extends State<UsersHome> {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: authProvider.users.length,
+                      itemCount: authProvider.notifications.length,
                       itemBuilder: (context, index) {
-                        final user = authProvider.users[index];
-                        return titleWidget(user);
+                        final notification = authProvider.notifications[index];
+                        // print(authProvider.notifications.length);
+                        // print(notification.values.first.name);
+                        // print(notification.keys.first.name);
+                        return titleWidget(notification);
                       },
                     ),
                   ),
@@ -73,8 +66,15 @@ class _UsersHomeState extends State<UsersHome> {
     );
   }
 
-  titleWidget(AppUser user) {
+  titleWidget(notification) {
     final authProvider = Provider.of<AuthManagerProvider>(context);
+    final projectProvider = Provider.of<ProjectProvider>(context);
+    final String projectName = notification.values.first.name;
+    final String messageType = notification.values.first.hasNotification;
+    Project project = notification.values.first;
+    AppUser user = notification.keys.first;
+    // final String userName = notification.keys.first.name;
+    final String message = "$messageType بند فى عهدة $projectName";
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       margin: const EdgeInsets.all(10),
@@ -83,16 +83,27 @@ class _UsersHomeState extends State<UsersHome> {
         color: AppTheme.primaryColor,
       ),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          await authProvider.removeNotification(
+            notification.values.first,
+            notification.keys.first,
+          );
           authProvider.updateUser(user);
-          Navigator.pushNamed(context, HomeScreen.routeName, arguments: true);
+          projectProvider.changeProject(project: project);
+          if (projectProvider.currentProject != null) {
+            Navigator.pushNamed(
+              context,
+              CashScreen.routeName,
+              arguments: project,
+            );
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              user.name!,
+              notification.keys.first.name!,
               style: const TextStyle(
                 color: AppTheme.white,
                 fontSize: 20,
@@ -100,7 +111,7 @@ class _UsersHomeState extends State<UsersHome> {
               ),
             ),
             Text(
-              user.email!,
+              message,
               style: const TextStyle(
                 color: AppTheme.white,
                 fontSize: 14,
